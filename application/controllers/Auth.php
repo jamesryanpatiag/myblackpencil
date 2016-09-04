@@ -61,16 +61,24 @@ class Auth extends CI_Controller {
 
 				if($this->isPasswordValid($this->input->post("password"), $user->password)){
 					
+					$person = $this->user_model->getPersonByUserId($user->id)[0];
+
 					$sessiondata = array(
 							'user_id'	=> $user->id,
-					        'username'  => $this->input->post("username")
+					        'username'  => $this->input->post("username"),
+					        'fullname'	=> $person->firstname . " " . 
+					        			   ($person->middlename==""?"":$person->middlename . " ") .
+				        			   	   $person->surname
 					);
 
 					$this->session->set_userdata($sessiondata);
 
+					//ADD switch to where users will be re-directed
+					$data['module'] = "dashboard";					
+
 					$this->load->view("dashboard/common/header");
 
-					$this->load->view("dashboard/index");
+					$this->load->view("dashboard/index",$data);
 
 					$this->load->view("dashboard/common/footer");
 

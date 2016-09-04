@@ -62,6 +62,13 @@
         	return $query->result();
         }
 
+        public function getPersonByUserId($userid){
+
+            $query = $this->db->get_where('person',array('userid'=>$userid));
+
+            return $query->result();
+        }
+
     	private function generateHashPassword($password){
 		
 		$options = [
