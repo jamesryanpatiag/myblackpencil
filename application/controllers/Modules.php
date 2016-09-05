@@ -21,7 +21,15 @@ class Modules extends CI_Controller {
 	
 	}
 
+	private function sessionChecker(){
+		if(!isset($_SESSION) && $_SESSION['user_id']==null||$_SESSION['user_id']==''){
+        	redirect("auth/loginPage");
+  		}
+	}
+
 	public function myDashboard(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "dashboard";
 
@@ -34,6 +42,8 @@ class Modules extends CI_Controller {
 	}
 
 	public function myClasses(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "my_classes";
 
@@ -50,6 +60,8 @@ class Modules extends CI_Controller {
 	}
 
 	public function pendingClasses(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "pending";
 
@@ -69,6 +81,8 @@ class Modules extends CI_Controller {
 
 	public function batchoutClasses(){
 	
+		$this->sessionChecker();
+	
 		$data["module"] = "batchout";
 
 		$data["page_title"] = "Batch-Out Classes";
@@ -86,6 +100,8 @@ class Modules extends CI_Controller {
 	}
 
 	public function inprogressClasses(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "inprogress";
 		
@@ -105,6 +121,8 @@ class Modules extends CI_Controller {
 
 	public function completedClasses(){
 
+		$this->sessionChecker();
+
 		$data["module"] = "completed";
 		
 		$data["page_title"] = "Completed Classes";
@@ -122,6 +140,8 @@ class Modules extends CI_Controller {
 	}
 
 	public function refundedClasses(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "refunded";
 		
@@ -142,6 +162,8 @@ class Modules extends CI_Controller {
 
 	public function escalatedClasses(){
 
+		$this->sessionChecker();
+
 		$data["module"] = "escalated";
 		
 		$data["page_title"] = "Escalated Classes";
@@ -159,6 +181,8 @@ class Modules extends CI_Controller {
 	}
 
 	public function consultants(){
+
+		$this->sessionChecker();
 
 		$data["module"] = "consultants";
 		
