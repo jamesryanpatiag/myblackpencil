@@ -63,19 +63,28 @@ class Auth extends CI_Controller {
 					
 					$person = $this->user_model->getPersonByUserId($user->id)[0];
 
+					$role =  $this->user_model->getRoleById($user->roleid)[0];
+
 					$sessiondata = array(
 							'user_id'	=> $user->id,
 					        'username'  => $this->input->post("username"),
 					        'fullname'	=> $person->firstname . " " . 
 					        			   ($person->middlename==""?"":$person->middlename . " ") .
-				        			   	   $person->surname
+				        			   	   $person->surname,
+        			   	    'role_code'	=> $role->code
 					);
+
+					$userlogin = array(
+							"last_login" => date('Y-m-d h:i:s')
+						);
+
+					$this->user_model->updateUser($userlogin,$user->id);
 
 					$this->session->set_userdata($sessiondata);
 
 					//ADD switch to where users will be re-directed
 					$data['module'] = "dashboard";					
-
+					
 					$this->load->view("dashboard/common/header");
 
 					$this->load->view("dashboard/index",$data);
@@ -138,7 +147,17 @@ class Auth extends CI_Controller {
 
 			}else{
 
-	        	$this->user_model->registerUser($this->input->post());
+				$roles = $this->user_model->getRoleByRoleCode('STUDENT');
+
+				$role = "";
+
+				if(!empty($this->user_model->getRoleByRoleCode('STUDENT'))){
+
+					$role = $roles[0];
+
+				}
+
+	        	$this->user_model->registerUser($this->input->post(), $role->id);
 
 	        	$this->session->set_flashdata('message', 'Registration success! Please check your email to validate your account.');
 				

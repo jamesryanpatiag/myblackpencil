@@ -38,7 +38,7 @@
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
-                  <th>Assign to Tutor</th>
+                  <th>Tutor</th>
                   <th>URL</th>
                   <th>Username</th>
                   <th>Password</th> 
@@ -51,23 +51,30 @@
                         <?php foreach($list as $item){ ?>
                             <tr>
                                 <td><?php echo $item->id;?></td>
-                                <td></td>
+                                <td><?php echo getTypeByCode($item->type)?></td>
                                 <td><?php echo $item->start_date;?></td>
                                 <td><?php echo $item->end_date;?></td>
                                 <td><?php echo $item->student_username;?></td>
                                 <td><?php echo $item->description;?></td>
                                 <td><?php echo $item->course;?></td>
                                 <td><?php echo getEducationalLevelByCode($item->educational_level_code);?></td>
-                                <td></td>
-                                <td></td>
+                                <td><a type="button" class="label label-primary" onClick="setNotesData('<?php echo $item->id;?>')" title="Add Notes" data-toggle="modal" data-target="#notes" >
+                                        Add Notes</a></td>
+                                <td><?php echo getUsernameById($item->tutor_id);?></td>
                                 <td><?php echo $item->url;?></td>
                                 <td><?php echo $item->student_username;?></td>
                                 <td><?php echo $item->student_password;?></td>
                                 <td><?php echo getStatusByCode($item->status);?></td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-flat"><span class="fa fa-pencil"></span> Edit</button>
-                                    <button type="button" class="btn btn-warning btn-flat" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
-                                        <span class="fa fa-exchange"> Change Status</button>
+                                    <button type="button" class="btn btn-warning btn-flat" title="Change Status" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
+                                        <span class="fa fa-exchange"></button>
+                                    <?php if($item->tutor_id==0){?>
+                                        <a href="#" data-toggle="modal" data-target="#assignTutor" title="Assign Tutor" class="btn btn-info btn-flat" onClick="setTutorData('<?php echo $item->id; ?>', '')">
+                                          <span class="fa fa-user"></span></a>
+                                    <?php }else{  ?>
+                                        <a href="#" data-toggle="modal" data-target="#assignTutor" title="Change Tutor" class="btn btn-info btn-flat" onClick="setTutorData('<?php echo $item->id; ?>', '<?php echo $item->tutor_id; ?>')">
+                                          <span class="fa fa-user"></span></a>
+                                    <?php }?>
                                 </td>
                             </tr>
                         <?php }?>
@@ -84,7 +91,7 @@
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
-                  <th>Assign to Tutor</th>
+                  <th>Tutor</th>
                   <th>URL</th>
                   <th>Username</th>
                   <th>Password</th>
@@ -104,46 +111,8 @@
   <?php $this->view("dashboard/common/footer-html"); ?>
   <div class="control-sidebar-bg"></div>
 </div>
-
+<?php $this->view("dashboard/modals/notesModal"); ?>
 <?php $this->view("dashboard/modals/changeStatus"); ?>
+<?php $this->view("dashboard/modals/assignTutorModal"); ?>
+<?php $this->view("dashboard/common/jsIncludeForModal"); ?>
 
-<script type="text/javascript">
-
-  function setData(value, status){
-      $("#cmbChangeStatus").val(status);
-      $("#classId").val(value);
-  }
-
-  $(document).ready(function(){
-
-      $('#submitChangeStatus').click(function() {
-        var form_data = {
-          classId: $('#classId').val(),
-          status: $('#cmbChangeStatus').val()
-        };
-        $.ajax({
-            url: "<?php echo site_url('modules/changeStatus'); ?>",
-            type: 'POST',
-            data: form_data,  
-            success: function(msg) {
-                console.log(msg);
-                if (msg == 'YES'){
-                  $('#alert-msg').html('<div class="alert alert-success text-center">Status has been successfully changed!</div>');
-                    clearFormData();
-                    
-                }else if (msg == 'NO'){
-                    $('#alert-msg').html('<div class="alert alert-danger text-center">Error in changing status! Please try again later.</div>');
-                }else{
-                    $('#alert-msg').html('<div class="alert alert-danger">' + msg + '</div>');
-                }
-            }
-        });
-        return false;
-      });
-
-      $('#changeStatus').on('hidden.bs.modal', function () {
-          location.reload();
-      })
-  })
-
-</script>

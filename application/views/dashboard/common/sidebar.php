@@ -58,7 +58,7 @@
         </li>
         <li class="<?php if($module=='inprogress'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/inprogressClasses');?>">
-            <i class="fa fa-hourglass-2"></i>
+            <i class="fa fa-hourglass"></i>
             <span>In-Progress Classes</span>
             <span class="pull-right-container">
             </span>
@@ -68,6 +68,31 @@
           <a href="<?php echo site_url('/modules/completedClasses');?>">
             <i class="fa fa-check-circle-o"></i>
             <span>Completed Classes</span>
+            <span class="pull-right-container">
+            </span>
+          </a>
+        </li>
+        <li class="header">MANAGER'S PANEL</li>
+        <li class="<?php if($module=='refunded'){echo 'active';}?> treeview">
+          <a href="<?php echo site_url('/modules/refundedClasses');?>">
+            <i class="fa fa-mail-reply-all"></i>
+            <span>Refunded Classes</span>
+            <span class="pull-right-container">
+            </span>
+          </a>
+        </li>
+        <li class="<?php if($module=='escalated'){echo 'active';}?> treeview">
+          <a href="<?php echo site_url('/modules/escalatedClasses');?>">
+            <i class="fa fa-check-circle-o"></i>
+            <span>Escalated Classes</span>
+            <span class="pull-right-container">
+            </span>
+          </a>
+        </li>
+        <li class="<?php if($module=='consultants'){echo 'active';}?> treeview">
+          <a href="<?php echo site_url('/modules/consultants');?>">
+            <i class="fa fa-users"></i>
+            <span>Consultants</span>
             <span class="pull-right-container">
             </span>
           </a>

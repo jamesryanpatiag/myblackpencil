@@ -11,11 +11,12 @@
                 parent::__construct();
         }
 
-        public function registerUser($data){
+        public function registerUser($data, $roleId){
 
 			$user_data = array(
 				"username" => $data["username"],
 				"password" => $this->generateHashPassword($data["password"]),
+                "roleid"    => $roleId,
 				"is_logged_in" => 0,
 				"last_login" => null,
 				"is_verified" => 0,
@@ -39,6 +40,14 @@
 			);
 			
 			$this->db->insert("person", $person_data);
+        }
+
+        public function updateUser($data, $userid){
+
+            $this->db->where('id', $userid);
+
+            $this->db->update('user', $data); 
+            
         }
 
         public function getUserByUsername($username){
@@ -71,13 +80,27 @@
 
     	private function generateHashPassword($password){
 		
-		$options = [
-		    'cost' => 11,
-		    'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
-		];
-		
-		return password_hash($password, PASSWORD_BCRYPT, $options);
-	}
+    		$options = [
+    		    'cost' => 11,
+    		    'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
+    		];
+    		
+    		return password_hash($password, PASSWORD_BCRYPT, $options);
 
+        }
+        
+        public function getRoleByRoleCode($code){
+
+            $query = $this->db->get_where('roles',array('code'=>$code));
+            
+            return $query->result();
+        }
+
+        public function getRoleById($id){
+
+            $query = $this->db->get_where('roles',array('id'=>$id));
+            
+            return $query->result();
+        }
 }
 ?>

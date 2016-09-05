@@ -11,7 +11,7 @@
           <?php echo validation_errors(); ?>
           <?php echo form_open('modules/changeStatus'); ?>
             <div class="box-body">
-               	<div id="alert-msg"></div>
+               	<div id="status-alert-msg"></div>
 	                <div class="form-group">
                     <input type="hidden" id="classId" />
 	                  <label for="status">Level</label>

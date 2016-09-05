@@ -5,6 +5,26 @@ function test_method($var = '')
 	return $var;
 }   
 
+function getTypeByCode($type){
+	switch($type){
+		case "ONLINE-CLASS":
+			return "Online Class";
+		break;
+		case "ONLINE-QUIZ":
+			return "Online Quiz";
+		break;
+		case "ONLINE-EXAM":
+			return "Online Exam";
+		break;
+		case "ESSAY-PAPER":
+			return "Essay Paper";
+		break;
+		case "PROJECT":
+			return "Project";
+		break;
+	}
+}
+
 function getEducationalLevelByCode($level){
 	switch($level){
 		case "HIGH_SCHOOL":
@@ -55,5 +75,18 @@ function getStatus(){
 			'REFUNDED'			=> 'Refunded',
 			'ESCALATION'		=> 'Escalation' 
 		);
+}
+
+function getUsernameById($userid){
+
+	$CI = get_instance();
+
+	$CI->load->model('user_model');
+
+	$users = $CI->module->getUserById($userid);
+	if(!empty($users)){
+		return $users[0]->username; 
+	}
+	return "";
 }
 

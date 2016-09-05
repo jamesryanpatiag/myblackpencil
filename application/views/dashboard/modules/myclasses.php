@@ -47,7 +47,7 @@
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
-                  <th>Assign to Tutor</th>
+                  <th>Tutor</th>
                   <th>URL</th>
                   <th>Username</th>
                   <th>Password</th> 
@@ -60,22 +60,24 @@
                         <?php foreach($list as $item){ ?>
                             <tr>
                                 <td><?php echo $item->id;?></td>
-                                <td></td>
+                                <td><?php echo getTypeByCode($item->type); ?></td>
                                 <td><?php echo $item->start_date;?></td>
                                 <td><?php echo $item->end_date;?></td>
                                 <td><?php echo $item->student_username;?></td>
                                 <td><?php echo $item->description;?></td>
                                 <td><?php echo $item->course;?></td>
                                 <td><?php echo getEducationalLevelByCode($item->educational_level_code);?></td>
-                                <td></td>
-                                <td></td>
+                                <td><a type="button" class="label label-primary" onClick="setNotesData('<?php echo $item->id;?>')" title="Add Notes" data-toggle="modal" data-target="#notes" >
+                                        Add Notes</a></td>
+                                <td><?php echo getUsernameById($item->tutor_id);?></td>
                                 <td><?php echo $item->url;?></td>
                                 <td><?php echo $item->student_username;?></td>
                                 <td><?php echo $item->student_password;?></td>
-                                <td><?php echo $item->status;?></td>
+                                <td><?php echo getStatusByCode($item->status);?></td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-flat"><span class="fa fa-pencil"></span> Edit</button>
-                                    <button type="button" class="btn btn-warning btn-flat" ><span class="fa fa-warning"></span> Refund</button>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" title="Edit" onClick="setDataClass('<?php echo $item->id;?>')" data-target="#editClass" >
+                                        <span class="fa fa-pencil"></button>
+                                    <button type="button" class="btn btn-danger btn-flat" title="Refund"><span class="fa fa-warning"></span></button>
                                 </td>
                             </tr>
                         <?php }?>
@@ -92,7 +94,7 @@
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
-                  <th>Assign to Tutor</th>
+                  <th>Tutor</th>
                   <th>URL</th>
                   <th>Username</th>
                   <th>Password</th>
@@ -113,230 +115,72 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.3.6
-    </div>
-    <strong>Copyright &copy; 2014-2016 My Black Pencil.</strong> All rights
-    reserved.
-  </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-user bg-yellow"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
-                <p>New phone +1(800)555-1234</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-                <p>nora@example.com</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
-                <p>Execution time 5 seconds</p>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="label label-danger pull-right">70%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Update Resume
-                <span class="label label-success pull-right">95%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Laravel Integration
-                <span class="label label-warning pull-right">50%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Back End Framework
-                <span class="label label-primary pull-right">68%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-      </div>
-      <!-- /.tab-pane -->
-      <!-- Stats tab content -->
-      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-      <!-- /.tab-pane -->
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Allow mail redirect
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Other sets of options are available
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Expose author name in posts
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Allow the user to show his name in blog posts
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <h3 class="control-sidebar-heading">Chat Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Show me as online
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Turn off notifications
-              <input type="checkbox" class="pull-right">
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Delete chat history
-              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-            </label>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+  <?php $this->view("dashboard/common/footer-html"); ?>
   <div class="control-sidebar-bg"></div>
 </div>
-
+<?php $this->view("dashboard/modals/notesModal"); ?>
 <?php $this->view("dashboard/modals/addClassModal"); ?>
-
+<?php $this->view("dashboard/modals/editClassModal"); ?>
+<?php $this->view("dashboard/common/jsIncludeForModal"); ?>
 <script>
   $(function () {
 
     //Date picker
     $('#start_dtpicker').datepicker({
+      format: 'yyyy-mm-dd',
       autoclose: true
     });
 
     $('#end_dtpicker').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true
+    });
+
+    $('#edit_start_dtpicker').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true
+    });
+
+    $('#edit_end_dtpicker').datepicker({
+      format: 'yyyy-mm-dd',
       autoclose: true
     });
   });
 </script>
 
 <script type="text/javascript">
+
+function setDataClass(id){
+  var form_data = {
+      id: id
+  }
+  $.ajax({
+        url: "<?php echo site_url('modules/getClassById'); ?>",
+        type: 'POST',
+        data: form_data,  
+        success: function(msg) {
+          var result = JSON.parse(msg);
+          $('#edit_id').val(result["id"]);
+          $("#edit_student_url").val(result["url"]);
+          $("#edit_type").val(result["type"]);
+          $('#edit_student_username').val(result["student_username"]),
+          $('#edit_student_password').val(result["student_password"]),
+          $('#edit_student_course').val(result["course"]),
+          $('#edit_student_description').val(result["description"]),
+          $("#edit_start_dtpicker").val(result["start_date"]),
+          $("#edit_end_dtpicker").val(result["end_date"]),
+          $("#edit_student_level").val(result["educational_level_code"])  
+        }
+    });
+}
+
 $(document).ready(function(){
-    $('#submit').click(function() {
+
+    $('#submitAddClass').click(function() {
       var form_data = {
-        student_url: $('#student_url').val(),
+          student_url: $('#student_url').val(),
+          type: $('#type').val(),
           student_username: $('#student_username').val(),
           student_password: $('#student_password').val(),
           student_course: $('#student_course').val(),
@@ -353,7 +197,7 @@ $(document).ready(function(){
               console.log(msg);
               if (msg == 'YES'){
                 $('#alert-msg').html('<div class="alert alert-success text-center">Class has been successfully created!</div>');
-                  clearFormData();
+                  clearFormData('');
                   
               }else if (msg == 'NO'){
                   $('#alert-msg').html('<div class="alert alert-danger text-center">Error in sending your message! Please try again later.</div>');
@@ -365,19 +209,54 @@ $(document).ready(function(){
       return false;
     });
 
+    $('#submitEditClass').click(function() {
+      var form_data = {
+          id: $('#edit_id').val(),
+          student_url: $('#edit_student_url').val(),
+          type: $('#edit_type').val(),
+          student_username: $('#edit_student_username').val(),
+          student_password: $('#edit_student_password').val(),
+          student_course: $('#edit_student_course').val(),
+          student_description: $('#edit_student_description').val(),
+          start_dtpicker: $("#edit_start_dtpicker").val(),
+          end_dtpicker: $("#edit_end_dtpicker").val(),
+          student_level: $("#edit_student_level").val()
+      };
+      $.ajax({
+          url: "<?php echo site_url('modules/editClass'); ?>",
+          type: 'POST',
+          data: form_data,  
+          success: function(msg) {
+              if (msg == 'YES'){
+                $('#edit-alert-msg').html('<div class="alert alert-success text-center">Class has been successfully created!</div>');
+              }else if (msg == 'NO'){
+                  $('#edit-alert-msg').html('<div class="alert alert-danger text-center">Error in sending your message! Please try again later.</div>');
+              }else{
+                  $('#edit-alert-msg').html('<div class="alert alert-danger">' + msg + '</div>');
+              }
+          }
+      });
+      return false;
+    });
+
     $('#myModal').on('hidden.bs.modal', function () {
-     location.reload();
+        location.reload();
     })
 
-    function clearFormData(){
-        $('#student_url').val("");
-        $('#student_username').val("");
-        $('#student_password').val("");
-        $('#student_course').val("");
-        $('#student_description').val("");
-        $("#start_dtpicker").val("");
-        $("#end_dtpicker").val("");
-        $("#student_level").val("");
+    $('#editClass').on('hidden.bs.modal', function () {
+        location.reload();
+    })
+
+    function clearFormData(suffix){
+        $("#" + suffix + "type").val("");
+        $("#" + suffix + "student_url").val("");
+        $("#" + suffix + "student_username").val("");
+        $("#" + suffix + "student_password").val("");
+        $("#" + suffix + "student_course").val("");
+        $("#" + suffix + "student_description").val("");
+        $("#" + suffix + "start_dtpicker").val("");
+        $("#" + suffix + "end_dtpicker").val("");
+        $("#" + suffix + "student_level").val("");
     }
 })
 

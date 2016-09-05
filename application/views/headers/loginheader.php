@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title><?php echo $title;?></title>
-
+    <link rel="icon" href="<?php echo base_url()."assets/";?>img/icon.png">
     <!-- Bootstrap Core CSS -->
     <link href="<?php echo base_url()."assets/";?>css/bootstrap.min.css" rel="stylesheet">
 
