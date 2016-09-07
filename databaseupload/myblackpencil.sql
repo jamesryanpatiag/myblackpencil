@@ -34,22 +34,10 @@ CREATE TABLE IF NOT EXISTS `class` (
   `created_by` bigint(20) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table myblackpencil.class: ~11 rows (approximately)
+-- Dumping data for table myblackpencil.class: ~0 rows (approximately)
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
-INSERT INTO `class` (`id`, `type`, `start_date`, `end_date`, `customer_id`, `tutor_id`, `description`, `course`, `educational_level_code`, `status`, `url`, `student_username`, `student_password`, `completion_date`, `created_by`, `created_date`) VALUES
-	(1, 'ONLINE-CLASS', '2016-09-01', '2016-10-08', 1, 2, 'onlineclass', 'onlineclass', 'HIGH_SCHOOL', 'COMPLETED', 'Online Class', 'onlineclass', 'onlineclass', '2016-09-05', 1, '2016-09-05 01:32:33'),
-	(2, 'ONLINE-QUIZ', '2016-09-01', '2016-10-08', 1, 2, 'onlinequiz', 'onlinequiz', 'UNDERGRADUATE', 'COMPLETED', 'onlinequiz', 'onlinequiz', 'onlinequiz', '2016-09-05', 1, '2016-09-05 01:32:52'),
-	(3, 'ONLINE-EXAM', '2016-09-01', '2016-09-05', 1, 3, 'onlineexam', 'onlineexam', 'HIGH_SCHOOL', 'PENDING', 'onlineexam', 'onlineexam', 'onlineexam', '0000-00-00', 1, '2016-09-05 01:33:12'),
-	(4, 'ESSAY-PAPER', '2016-10-05', '2016-09-05', 1, 2, 'essaypaper', 'essaypaper', 'GRADUATE', 'REFUNDED', 'essaypaper', 'essaypaper', 'essaypaper', '0000-00-00', 1, '2016-09-05 01:33:40'),
-	(5, 'PROJECT', '2016-09-27', '2016-10-08', 1, 0, 'project', 'project', 'UNDERGRADUATE', 'PENDING', 'project', 'project', 'project', '0000-00-00', 1, '2016-09-05 01:34:00'),
-	(6, 'ONLINE-CLASS', '2016-09-01', '2016-10-08', 1, 0, 'sample Class', 'sample Class', 'UNDERGRADUATE', 'PENDING', 'sample Class', 'sample Class', 'sample Class', '0000-00-00', 1, '2016-09-05 13:43:40'),
-	(7, 'ONLINE-QUIZ', '2016-10-06', '2016-10-07', 1, 0, 'sample quiz', 'sample quiz', 'HIGH_SCHOOL', 'PENDING', 'sample quiz', 'sample quiz', 'sample quiz', '0000-00-00', 1, '2016-09-05 13:44:07'),
-	(8, 'ONLINE-EXAM', '2016-09-05', '2016-09-05', 1, 0, 'sample exam', 'sample exam', 'HIGH_SCHOOL', 'PENDING', 'sample exam', 'sample exam', 'sample exam', '0000-00-00', 1, '2016-09-05 13:44:17'),
-	(9, 'ESSAY-PAPER', '2016-09-05', '2016-09-05', 1, 0, 'sample paper', 'sample paper', 'UNDERGRADUATE', 'PENDING', 'sample paper', 'sample paper', 'sample paper', '0000-00-00', 1, '2016-09-05 13:44:31'),
-	(10, 'ESSAY-PAPER', '2016-09-05', '2016-09-05', 1, 0, 'sample paper', 'sample paper', 'UNDERGRADUATE', 'PENDING', 'sample paper', 'sample paper', 'sample paper', '0000-00-00', 1, '2016-09-05 13:44:49'),
-	(11, 'PROJECT', '2016-09-05', '2016-09-05', 1, 0, 'sample project', 'sample project', 'HIGH_SCHOOL', 'PENDING', 'sample project', 'sample project', 'sample project', '0000-00-00', 1, '2016-09-05 13:45:25');
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 
 
@@ -63,55 +51,10 @@ CREATE TABLE IF NOT EXISTS `notes` (
   `hasAttachment` tinyint(4) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table myblackpencil.notes: ~44 rows (approximately)
+-- Dumping data for table myblackpencil.notes: ~0 rows (approximately)
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` (`id`, `userid`, `classid`, `message`, `fileid`, `hasAttachment`, `created_date`) VALUES
-	(1, 1, 4, 'save', 0, 0, '2016-09-06 01:58:08'),
-	(2, 1, 4, 'save', 0, 0, '2016-09-06 02:00:45'),
-	(3, 1, 4, 'dsadsad', 0, 0, '2016-09-06 02:00:48'),
-	(4, 1, 4, 'asdsad', 0, 0, '2016-09-06 02:00:49'),
-	(5, 1, 4, '$(document).ready(function(){     lastElementTop = $(\'#listofstuff .anitem:last-child\').position().top ;     scrollAmount = lastElementTop - 200 ;  $(\'#listofstuff\').animate({scrollTop: scrollAmount},1000); });', 0, 0, '2016-09-06 02:01:12'),
-	(6, 1, 4, 'sdfdsfds', 0, 0, '2016-09-06 02:03:06'),
-	(7, 1, 4, 'sdfsdf', 0, 0, '2016-09-06 02:03:07'),
-	(8, 1, 4, 'sfdsfsd', 0, 0, '2016-09-06 02:03:07'),
-	(9, 1, 1, 'this is refunded', 0, 0, '2016-09-06 02:03:36'),
-	(10, 1, 1, 'save', 0, 0, '2016-09-06 02:17:26'),
-	(11, 1, 1, 'hello james', 0, 0, '2016-09-06 02:17:36'),
-	(12, 1, 5, 'sdfdsf', 0, 0, '2016-09-06 02:27:46'),
-	(13, 1, 5, 'f', 0, 0, '2016-09-06 02:27:47'),
-	(14, 1, 5, 'sd', 0, 0, '2016-09-06 02:27:47'),
-	(15, 1, 5, 'sdf', 0, 0, '2016-09-06 02:27:48'),
-	(16, 1, 3, 'sdfdsf', 0, 0, '2016-09-06 02:29:09'),
-	(17, 1, 1, 'save', 0, 0, '2016-09-06 02:30:49'),
-	(18, 1, 1, 'sadsad', 0, 0, '2016-09-06 02:30:51'),
-	(19, 1, 1, 'sad', 0, 0, '2016-09-06 02:30:51'),
-	(20, 1, 1, 'sad', 0, 0, '2016-09-06 02:30:51'),
-	(21, 1, 1, 'd', 0, 0, '2016-09-06 02:30:52'),
-	(22, 1, 1, 'a', 0, 0, '2016-09-06 02:30:52'),
-	(23, 1, 1, 'sa', 0, 0, '2016-09-06 02:30:52'),
-	(24, 1, 1, 'sa', 0, 0, '2016-09-06 02:30:52'),
-	(25, 1, 10, '1', 0, 0, '2016-09-06 02:31:08'),
-	(26, 1, 10, '2', 0, 0, '2016-09-06 02:31:08'),
-	(27, 1, 10, '3', 0, 0, '2016-09-06 02:31:08'),
-	(28, 1, 10, '4', 0, 0, '2016-09-06 02:31:09'),
-	(29, 1, 10, '5', 0, 0, '2016-09-06 02:31:09'),
-	(30, 1, 10, '5', 0, 0, '2016-09-06 02:31:09'),
-	(31, 1, 10, '6', 0, 0, '2016-09-06 02:31:10'),
-	(32, 1, 10, '7', 0, 0, '2016-09-06 02:31:10'),
-	(33, 1, 10, '8', 0, 0, '2016-09-06 02:31:10'),
-	(34, 1, 10, '9', 0, 0, '2016-09-06 02:31:10'),
-	(35, 1, 10, '9', 0, 0, '2016-09-06 02:31:11'),
-	(36, 1, 10, '0', 0, 0, '2016-09-06 02:31:11'),
-	(37, 1, 10, '1', 0, 0, '2016-09-06 02:31:12'),
-	(38, 1, 10, '0', 0, 0, '2016-09-06 02:31:13'),
-	(39, 1, 10, '2', 0, 0, '2016-09-06 02:31:13'),
-	(40, 1, 10, '3', 0, 0, '2016-09-06 02:31:14'),
-	(41, 1, 10, '4', 0, 0, '2016-09-06 02:31:14'),
-	(42, 1, 10, '5', 0, 0, '2016-09-06 02:31:14'),
-	(43, 1, 10, '6', 0, 0, '2016-09-06 02:31:14'),
-	(44, 1, 10, '6', 0, 0, '2016-09-06 02:31:15');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 
 
@@ -143,6 +86,21 @@ INSERT INTO `person` (`id`, `userid`, `firstname`, `middlename`, `email`, `surna
 	(2, 2, 'Consultant', NULL, 'consultant_1@yahoo.com', 'Consultant', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-09-05 00:41:48'),
 	(3, 3, 'Consultant', NULL, 'consultant_2@yahoo.com', 'Consultant', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-09-05 00:42:00');
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
+
+
+-- Dumping structure for table myblackpencil.refunded
+CREATE TABLE IF NOT EXISTS `refunded` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `classid` bigint(20) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `refunded_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table myblackpencil.refunded: ~0 rows (approximately)
+/*!40000 ALTER TABLE `refunded` DISABLE KEYS */;
+/*!40000 ALTER TABLE `refunded` ENABLE KEYS */;
 
 
 -- Dumping structure for table myblackpencil.roles
@@ -181,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table myblackpencil.user: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `roleid`, `username`, `password`, `is_logged_in`, `last_login`, `is_verified`, `is_active`, `created_by`, `created_date`) VALUES
-	(1, 2, 'admin', '$2y$11$f3KeUr418qFCzrE7FZBt9O5Cc7kaJKbseYmRer2U3TUV3ufm5RkhS', 0, '2016-09-06 08:08:30', 0, 1, 1, '2016-09-04 16:56:24'),
+	(1, 2, 'admin', '$2y$11$f3KeUr418qFCzrE7FZBt9O5Cc7kaJKbseYmRer2U3TUV3ufm5RkhS', 0, '2016-09-07 08:34:08', 0, 1, 1, '2016-09-04 16:56:24'),
 	(2, 3, 'consultant_1', '$2y$11$w23MngY4VcLKk9/QVPH5zuXXMx7eIh5UybvuQe92BdHFtiuQolxre', 0, '2016-09-05 00:43:14', 0, 1, 1, '2016-09-05 00:41:48'),
 	(3, 3, 'consultant_2', '$2y$11$i9Lg9ndVHH4c30VfzjwyQ.24EZdtr3tD/VOUp46Dhrgq1kleSalUa', 0, '2016-09-05 00:43:16', 0, 1, 1, '2016-09-05 00:41:59');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
