@@ -33,16 +33,16 @@
                   <th>Type</th>  
                   <th>Start Date</th>  
                   <th>End Date</th>  
-                  <th>Customer Username</th>   
+                  <th>Student</th>   
                   <th>Description</th>   
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
                   <th>Tutor</th>
-                  <th>URL</th>
+<!--                   <th>URL</th>
                   <th>Username</th>
-                  <th>Password</th> 
-                  <th>Status</th>
+                  <th>Password</th>  -->
+                  <!-- <th>Status</th> -->
                   <th>Actions</th> 
                 </tr>
                 </thead>
@@ -54,7 +54,7 @@
                                 <td><?php echo getTypeByCode($item->type)?></td>
                                 <td><?php echo $item->start_date;?></td>
                                 <td><?php echo $item->end_date;?></td>
-                                <td><?php echo $item->student_username;?></td>
+                                <td><?php echo getUsernameById($item->customer_id);?></td>
                                 <td><?php echo $item->description;?></td>
                                 <td><?php echo $item->course;?></td>
                                 <td><?php echo getEducationalLevelByCode($item->educational_level_code);?></td>
@@ -63,12 +63,14 @@
                                         Add Notes</a>
                                 </td>
                                 <td><?php echo getUsernameById($item->tutor_id);?></td>
-                                <td><?php echo $item->url;?></td>
+                                <!-- <td><?php echo $item->url;?></td>
                                 <td><?php echo $item->student_username;?></td>
                                 <td><?php echo $item->student_password;?></td>
-                                <td><?php echo getStatusByCode($item->status);?></td>
+                                <td><?php echo getStatusByCode($item->status);?></td> -->
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-flat" title="Change Status" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
+                                    <button type="button" class="btn btn-info btn-flat" title="Info" data-toggle="modal" onClick="setStudentCredData('<?php echo $item->id;?>')" data-target="#customerCredentials" >
+                                        <span class="fa fa-info-circle"></button>
+                                   <button type="button" class="btn btn-warning btn-flat" title="Change Status" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
                                         <span class="fa fa-exchange"></button>
                                     <?php if($item->tutor_id==0){?>
                                         <a href="#" data-toggle="modal" data-target="#assignTutor" title="Assign Tutor" class="btn btn-info btn-flat" onClick="setTutorData('<?php echo $item->id; ?>', '')">
@@ -88,16 +90,16 @@
                   <th>Type</th>  
                   <th>Start Date</th>  
                   <th>End Date</th>  
-                  <th>Customer Username</th>   
+                  <th>Student</th>   
                   <th>Description</th>   
                   <th>Course</th>  
                   <th>Level</th>   
                   <th>Notes</th>
                   <th>Tutor</th>
-                  <th>URL</th>
+                  <!-- <th>URL</th>
                   <th>Username</th>
                   <th>Password</th>
-                  <th>Status</th>
+                  <th>Status</th> -->
                   <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -113,7 +115,9 @@
   <div class="control-sidebar-bg"></div>
 
 </div>
-<?php $this->view("dashboard/modals/notesModal"); ?>
+
 <?php $this->view("dashboard/modals/changeStatus"); ?>
+<?php $this->view("dashboard/modals/custCredentialModal"); ?>
+<?php $this->view("dashboard/modals/notesModal"); ?>
 <?php $this->view("dashboard/modals/assignTutorModal"); ?>
 <?php $this->view("dashboard/common/jsIncludeForModal"); ?>

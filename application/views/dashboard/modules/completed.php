@@ -32,10 +32,10 @@
                   <th>Completion Date</th>  
                   <th>Assignment ID</th>  
                   <th>Tutor</th>  
-                  <th>Customer Name</th>  
+                  <th>Student</th>  
                   <th>Type</th>   
                   <th>Notes</th>   
-                  <th>Assign to Tutor</th>  
+                  <th>Re-Assign to Tutor</th>  
                 </tr>
                 </thead>
                 <tbody>
@@ -67,10 +67,10 @@
                   <th>Completion Date</th>  
                   <th>Assignment ID</th>  
                   <th>Tutor</th>  
-                  <th>Customer Name</th>  
+                  <th>Student</th>  
                   <th>Type</th>   
                   <th>Notes</th>   
-                  <th>Assign to Tutor</th>
+                  <th>Re-Assign to Tutor</th>
                 </tr>
                 </tfoot>
               </table>

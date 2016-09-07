@@ -199,4 +199,18 @@ class Auth extends CI_Controller {
 			return false;
 		}	
 	}
+
+	public function logout(){
+
+		$sessionData = $this->session->all_userdata();
+		
+		foreach($sessionData as $key =>$val){
+        
+         	$this->session->unset_userdata($key);
+	  	
+	  	}
+
+	  	$this->loginPage();
+
+	}
 }

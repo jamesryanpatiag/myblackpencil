@@ -62,19 +62,19 @@
                 <?php if($isRegisterLinkVisible && $isLoginLinkVisible){?>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#about">About Us</a>
+                        <a class="hidden-sm hidden-xs" href="#about">About Us</a>
                     </li>
                     <li>
-                        <a href="#services">Our Services</a>
+                        <a class="hidden-sm hidden-xs" href="#services">Our Services</a>
                     </li>
                     <li>
-                        <a href="#promise">Our Promise</a>
+                        <a class="hidden-sm hidden-xs" href="#promise">Our Promise</a>
                     </li>
                     <li>
-                        <a href="#faqs">FAQs</a>
+                        <a class="hidden-sm hidden-xs" href="#faqs">FAQs</a>
                     </li>
                     <li>
-                        <a href="#testimonials">Testimonials</a>
+                        <a class="hidden-sm hidden-xs" href="#testimonials">Testimonials</a>
                     </li>
                 </ul>
                 <?php }?>

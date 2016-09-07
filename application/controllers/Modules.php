@@ -139,7 +139,7 @@ class Modules extends CI_Controller {
 
 	}
 
-	public function refundedClasses(){
+	public function refundedClasses($userid = ""){
 
 		$this->sessionChecker();
 
@@ -147,7 +147,7 @@ class Modules extends CI_Controller {
 		
 		$data["page_title"] = "Refunded Classes";
 
-		$data["list"] = $this->module->getClassByStatus('REFUNDED');
+		$data["list"] = $this->module->getRefundedClasses($userid);
 
 		$data["tutors"] = $this->module->usersByRole('TUTOR');
 		
@@ -195,6 +195,12 @@ class Modules extends CI_Controller {
 		$this->load->view("dashboard/modules/consultants",$data);
 
 		$this->load->view("dashboard/common/footer");
+
+	}
+
+	public function getStudentInfo($classid){
+
+		echo json_encode($this->module->getClassById($classid));
 
 	}
 
@@ -255,7 +261,6 @@ class Modules extends CI_Controller {
         	echo validation_errors();
 
         }else{
-
         	$completion_date = '';
         	if($this->input->post("status")=='COMPLETED'){
 
@@ -350,5 +355,35 @@ class Modules extends CI_Controller {
         	echo json_encode($this->module->getNotesById($notesid));
 
         }
+	}
+
+
+	public function refundClass(){
+
+		$this->form_validation->set_rules('refundMessage', 'Reason', 'required|trim');
+
+		if ($this->form_validation->run() == FALSE){
+
+        	echo validation_errors();
+
+        }else{
+
+        	$data = array(
+        			'status' => 'REFUNDED'
+        		);
+
+        	$this->module->updateClass($data,$this->input->post('classId'));
+
+        	$this->module->addRefundedClass($this->input->post('refundMessage'), $this->input->post('classId'));
+
+        	echo "YES";
+
+        }
+	}
+
+	public function getRefundDataByClassId($classid){
+
+		echo json_encode($this->module->getRefundDataByClassId($classid));
+
 	}
 }

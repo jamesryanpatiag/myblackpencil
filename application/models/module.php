@@ -57,10 +57,43 @@
         }
 
         public function getClassByCustomerId(){
-        
-        	$query = $this->db->get_where('class',array('customer_id'=>$_SESSION['user_id']));
-        	
-        	return $query->result();
+
+            $this->db->select('*');    
+            
+            $this->db->from('class c');
+            
+            $this->db->where('c.customer_id',$_SESSION['user_id']);
+            
+            $this->db->where('c.status != ','REFUNDED');
+            
+            $query = $this->db->get();
+            
+            return $query->result();
+
+        }
+
+        public function getRefundedClasses($userid = ""){
+
+            $this->db->select('*');
+
+            $this->db->from("class c");
+
+            $this->db->join("refunded r", "c.id = r.classid", "inner");
+
+            $this->db->join("user u", "c.tutor_id = u.id", "inner");
+
+            $this->db->where("c.status", 'REFUNDED');
+
+            if($userid != ""){
+
+                $this->db->where("c.tutor_id", $userid);
+
+            }
+
+            $query = $this->db->get();
+
+            return $query->result();
+
         }
 
         public function usersByRole($role){
@@ -129,6 +162,34 @@
             $query = $this->db->get();
 
             return $query->result();
+        }
+
+        public function getRefundDataByClassId($classid){
+
+            $this->db->from("refunded r");
+
+            $this->db->where('r.classid',$classid);
+
+            $this->db->limit(1);
+            
+            $this->db->order_by("r.id", "desc");
+            
+            $query = $this->db->get();
+
+            return $query->result();
+
+        }
+
+        public function addRefundedClass($message, $classid){
+
+            $class = array(
+                "classid" => $classid,
+                "message" => $message,
+                "created_by" => $_SESSION["user_id"]
+            );      
+
+            $this->db->insert("refunded", $class);
+
         }
     }
 ?>
