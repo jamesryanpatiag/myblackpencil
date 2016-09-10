@@ -50,9 +50,16 @@
         }
 
         public function getClassByStatus($status){
-        
-            $query = $this->db->get_where('class',array('status'=>$status));
             
+            if($_SESSION['role_code']==TUTOR){
+
+                $query = $this->db->get_where('class',array('status'=>$status,'tutor_id'=>$_SESSION['user_id']));
+
+            }else{
+
+                $query = $this->db->get_where('class',array('status'=>$status));
+            
+            }
             return $query->result();
         }
 
@@ -95,26 +102,7 @@
             return $query->result();
 
         }
-
-        public function usersByRole($role){
-
-             $this->db->select("*"); 
-
-             $this->db->from("user u");  
-
-             $this->db->join("roles r", "r.id = u.roleid", "inner");
-
-             $this->db->join("person p", "p.userid = u.id", "inner");
-
-             $this->db->where("r.code", $role);
-
-             $this->db->order_by("u.id", "desc");
-
-             $query = $this->db->get();
-
-             return $query->result();
-        }
-
+        
         public function getUserById($userid){
 
             $query = $this->db->get_where('user',array('id'=>$userid));

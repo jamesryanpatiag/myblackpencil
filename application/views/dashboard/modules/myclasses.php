@@ -75,15 +75,21 @@
                                 <td><?php echo $item->student_password;?></td> -->
                                 <td><?php echo getStatusByCode($item->status);?></td>
                                 <td>
+                                    <?php if(permissionChecker(array(TUTOR, MANAGER, ADMINISTRATOR))) { ?>
                                     <button type="button" class="btn btn-warning btn-flat" title="Change Status" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
                                         <span class="fa fa-exchange"></button>
+                                    <?php } ?>
+                                    <?php if(permissionChecker(array(STUDENT, MANAGER, ADMINISTRATOR))) { ?>
                                     <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" title="Edit" onClick="setDataClass('<?php echo $item->id;?>')" data-target="#editClass" >
                                         <span class="fa fa-pencil"></button>
+                                    <?php } ?>
+                                    <?php if(permissionChecker(array(STUDENT))) { ?>
                                     <button type="button"
                                         data-toggle="modal" 
                                         onClick="setRefundClassData('<?php echo $item->id;?>')" 
                                         data-target="#refundClass" 
                                         class="btn btn-danger btn-flat" title="Refund/Cancel Class"><span class="fa fa-warning"></span></button>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php }?>

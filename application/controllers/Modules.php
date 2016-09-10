@@ -21,15 +21,9 @@ class Modules extends CI_Controller {
 	
 	}
 
-	private function sessionChecker(){
-		if(!isset($_SESSION) && $_SESSION['user_id']==null||$_SESSION['user_id']==''){
-        	redirect("auth/loginPage");
-  		}
-	}
-
 	public function myDashboard(){
 
-		$this->sessionChecker();
+		sessionChecker();
 
 		$data["module"] = "dashboard";
 
@@ -43,11 +37,13 @@ class Modules extends CI_Controller {
 
 	public function myClasses(){
 
-		$this->sessionChecker();
+		sessionChecker();
 
 		$data["module"] = "my_classes";
 
 		$data["page_title"] = "My Classes";
+
+		permissionChecker(array(STUDENT), true);
 
 		$data["list"] = $this->module->getClassByCustomerId();
 
@@ -61,7 +57,9 @@ class Modules extends CI_Controller {
 
 	public function pendingClasses(){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(TUTOR, ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "pending";
 
@@ -69,7 +67,7 @@ class Modules extends CI_Controller {
 
 		$data["list"] = $this->module->getClassByStatus('PENDING');
 
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
+		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
 
 		$this->load->view("dashboard/common/header");
 
@@ -81,16 +79,18 @@ class Modules extends CI_Controller {
 
 	public function batchoutClasses(){
 	
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(TUTOR, ADMINISTRATOR, MANAGER), true);
 	
 		$data["module"] = "batchout";
 
 		$data["page_title"] = "Batch-Out Classes";
 
 		$data["list"] = $this->module->getClassByStatus('BATCH-OUT');
-		
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
 
+		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
+		
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/batchout",$data);
@@ -99,9 +99,33 @@ class Modules extends CI_Controller {
 
 	}
 
+	public function initialReviewClasses(){
+	
+		sessionChecker();
+
+		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
+	
+		$data["module"] = "initial_review";
+
+		$data["page_title"] = "Initial Review Classes";
+
+		$data["list"] = $this->module->getClassByStatus('INITIAL-REVIEW');
+
+		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
+		
+		$this->load->view("dashboard/common/header");
+
+		$this->load->view("dashboard/modules/initialreview",$data);
+
+		$this->load->view("dashboard/common/footer");	
+
+	}
+
 	public function inprogressClasses(){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(TUTOR, ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "inprogress";
 		
@@ -109,8 +133,8 @@ class Modules extends CI_Controller {
 
 		$data["list"] = $this->module->getClassByStatus('IN-PROGRESS');
 
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
-		
+		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
+
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/inprogress",$data);
@@ -121,7 +145,9 @@ class Modules extends CI_Controller {
 
 	public function completedClasses(){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(TUTOR, ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "completed";
 		
@@ -129,8 +155,8 @@ class Modules extends CI_Controller {
 
 		$data["list"] = $this->module->getClassByStatus('COMPLETED');
 
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
-		
+		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
+
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/completed",$data);
@@ -141,7 +167,9 @@ class Modules extends CI_Controller {
 
 	public function refundedClasses($userid = ""){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "refunded";
 		
@@ -149,8 +177,6 @@ class Modules extends CI_Controller {
 
 		$data["list"] = $this->module->getRefundedClasses($userid);
 
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
-		
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/refunded",$data);
@@ -162,7 +188,9 @@ class Modules extends CI_Controller {
 
 	public function escalatedClasses(){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "escalated";
 		
@@ -170,8 +198,6 @@ class Modules extends CI_Controller {
 
 		$data["list"] = $this->module->getClassByStatus('ESCALATION');
 
-		$data["tutors"] = $this->module->usersByRole('TUTOR');
-		
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/escalations",$data);
@@ -182,19 +208,37 @@ class Modules extends CI_Controller {
 
 	public function consultants(){
 
-		$this->sessionChecker();
+		sessionChecker();
+
+		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = "consultants";
 		
 		$data["page_title"] = "Consultants";
 
-		$data["list"] = $this->module->usersByRole('TUTOR');
+		$data["list"] = $this->user_model->getUsersByRole('TUTOR');
 
 		$this->load->view("dashboard/common/header");
 
 		$this->load->view("dashboard/modules/consultants",$data);
 
 		$this->load->view("dashboard/common/footer");
+
+	}
+
+	public function tutorClassesPage(){
+
+		$data["list"] = $this->module->getClassByStatus($this->input->post('status'));	
+		
+		$this->load->view("dashboard/tables/tutorClassesTables",$data);
+
+	}
+
+	public function completedClassPage(){
+
+		$data["list"] = $this->module->getClassByStatus($this->input->post('status'));	
+		
+		$this->load->view("dashboard/tables/completedClassesTable",$data);
 
 	}
 
@@ -234,14 +278,23 @@ class Modules extends CI_Controller {
         }else{
 
         	$data = array(
+
 				"url" => $this->input->post('student_url'),								
+				
 				"type" => $this->input->post('type'),
+				
 				"student_username" => $this->input->post('student_username'),
+				
 				"student_password" => $this->input->post('student_password'),
+				
 				"course" => $this->input->post('student_course'),
+				
 				"description" => $this->input->post('student_description'),
+				
 				"start_date" => date('Y-m-d', strtotime($this->input->post("start_dtpicker"))),
+				
 				"end_date" => date('Y-m-d', strtotime($this->input->post("end_dtpicker"))),
+				
 				"educational_level_code" => $this->input->post('student_level')
         	);
 

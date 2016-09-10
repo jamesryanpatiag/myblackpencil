@@ -1,3 +1,6 @@
+<style>
+  .datepicker{z-index:1151 !important;}
+</style>
 <div class="wrapper">
 
   <?php $this->view("dashboard/common/sub-header"); ?>
@@ -18,22 +21,19 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
-
-            <input type="hidden" value="BATCH-OUT" id="classStatus">
+    <section class="content" id="page_content">
+      <input type="hidden" id="classStatus" value="INITIAL-REVIEW" />
+            
             <?php $this->view("dashboard/tables/tutorClassesTables", $list); ?>
-    
+            
     </section>
+    <!-- /.content -->
   </div>
-
   <?php $this->view("dashboard/common/footer-html"); ?>
-  
   <div class="control-sidebar-bg"></div>
-
 </div>
-
-<?php $this->view("dashboard/modals/changeStatus"); ?>
 <?php $this->view("dashboard/modals/custCredentialModal"); ?>
 <?php $this->view("dashboard/modals/notesModal"); ?>
+<?php $this->view("dashboard/modals/changeStatus"); ?>
 <?php $this->view("dashboard/modals/assignTutorModal"); ?>
 <?php $this->view("dashboard/common/jsIncludeForModal"); ?>

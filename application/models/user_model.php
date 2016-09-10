@@ -11,12 +11,12 @@
                 parent::__construct();
         }
 
-        public function registerUser($data, $roleId){
+        public function registerUser($data, $role){
 
 			$user_data = array(
 				"username" => $data["username"],
 				"password" => $this->generateHashPassword($data["password"]),
-                "roleid"    => $roleId,
+                "role"    => $role,
 				"is_logged_in" => 0,
 				"last_login" => null,
 				"is_verified" => 0,
@@ -35,6 +35,9 @@
     			"userid" => $userId,
     			"email" => $data["email"],
     			"firstname" => $data["first_name"],
+                "middlename" => isset($data["middlename"]) ? $data["middlename"] : "",
+                "dob" => isset($data["dob"]) ? $data["dob"] : "",
+                "gender" => isset($data["gender"]) ? $data["gender"] : "",
     			"surname" => $data["last_name"],
 				"created_by" => 1
 			);
@@ -48,6 +51,23 @@
 
             $this->db->update('user', $data); 
             
+        }
+
+        public function getUsersByRole($role){
+
+
+            $this->db->select('*');
+
+            $this->db->from("user u");
+
+            $this->db->join("person p", "u.id = p.userid", "inner");
+
+            $this->db->where("u.role", $role);
+
+            $query = $this->db->get();
+
+            return $query->result();
+
         }
 
         public function getUserByUsername($username){
@@ -88,19 +108,21 @@
     		return password_hash($password, PASSWORD_BCRYPT, $options);
 
         }
-        
-        public function getRoleByRoleCode($code){
 
-            $query = $this->db->get_where('roles',array('code'=>$code));
-            
+        public function getUserById($userid){
+
+            $this->db->select('*');
+
+            $this->db->from("user u");
+
+            $this->db->join("person p", "u.id = p.userid", "inner");
+
+            $this->db->where("u.id", $userid);
+
+            $query = $this->db->get();
+
             return $query->result();
-        }
 
-        public function getRoleById($id){
-
-            $query = $this->db->get_where('roles',array('id'=>$id));
-            
-            return $query->result();
         }
 }
 ?>

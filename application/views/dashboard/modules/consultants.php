@@ -24,10 +24,10 @@
           <div class="box">
             <div class="box-header">Table List</h3>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-block btn-primary btn-flat"
-                       data-toggle="modal" data-target="#addConsultant" >
+                    <a type="button" class="btn btn-block btn-primary btn-flat"
+                       href="<?php echo site_url('user/userpage/consultant/');?>" >
                       <span class="fa fa-plus"></span>
-                      Add New Consultant</button>
+                      Add New Consultant</a>
                 </div>
             </div>
             <!-- /.box-header -->
@@ -53,8 +53,11 @@
 				        			   	   $item->surname; ?></td>
 	        			   	   	<td><?php echo $item->last_login;?></td>
                                 <td>
-<!--                                     <button type="button" class="btn btn-warning btn-flat" data-toggle="modal" onClick="setData('<?php echo $item->id;?>','<?php echo $item->status;?>')" data-target="#changeStatus" >
-                                        <span class="fa fa-exchange"> Change Status</button> -->
+                                    <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
+                                    <a class="btn btn-primary btn-flat" title="Edit" 
+                                     href="<?php echo site_url('user/userpage/consultant/') . $item->id;?>" >
+                                        <span class="fa fa-pencil"></a>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php }?>

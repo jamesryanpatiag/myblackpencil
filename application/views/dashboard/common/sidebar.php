@@ -11,18 +11,6 @@
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
         <li class="<?php if($module=='dashboard'){echo 'active';}?> treeview">
@@ -32,6 +20,7 @@
             </span>
           </a>
         </li>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='pending'){echo 'active';}?>">
           <a href="<?php echo site_url('/modules/pendingClasses');?>">
             <i class="fa fa-ellipsis-h"></i>
@@ -40,6 +29,18 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
+        <li class="<?php if($module=='initial_review'){echo 'active';}?>">
+          <a href="<?php echo site_url('/modules/initialReviewClasses');?>">
+            <i class="fa fa-sticky-note"></i>
+            <span>Initial Review Classes</span>
+            <span class="pull-right-container">
+            </span>
+          </a>
+        </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(STUDENT))) { ?>
         <li class="<?php if($module=='my_classes'){echo 'active';}?>">
           <a href="<?php echo site_url('/modules/myClasses');?>">
             <i class="fa fa-files-o"></i>
@@ -48,6 +49,8 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(TUTOR, MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='batchout'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/batchoutClasses');?>">
             <i class="fa fa-reply"></i>
@@ -56,6 +59,8 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(TUTOR, MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='inprogress'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/inprogressClasses');?>">
             <i class="fa fa-hourglass"></i>
@@ -64,6 +69,8 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(TUTOR, MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='completed'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/completedClasses');?>">
             <i class="fa fa-check-circle-o"></i>
@@ -72,6 +79,8 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
         <li class="header">MANAGER'S PANEL</li>
         <li class="<?php if($module=='refunded'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/refundedClasses');?>">
@@ -81,6 +90,8 @@
             </span>
           </a>
         </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='escalated'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/escalatedClasses');?>">
             <i class="fa fa-check-circle-o"></i>
@@ -89,6 +100,8 @@
             </span>
           </a>
         </li>
+         <?php } ?>
+         <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='consultants'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/consultants');?>">
             <i class="fa fa-users"></i>
@@ -97,6 +110,7 @@
             </span>
           </a>
         </li>
+        <?php } ?>
       </ul>
     </section>
     <!-- /.sidebar -->

@@ -63,19 +63,19 @@ class Auth extends CI_Controller {
 					
 					$person = $this->user_model->getPersonByUserId($user->id)[0];
 
-					$role =  $this->user_model->getRoleById($user->roleid)[0];
-
 					$sessiondata = array(
 							'user_id'	=> $user->id,
 					        'username'  => $this->input->post("username"),
 					        'fullname'	=> $person->firstname . " " . 
 					        			   ($person->middlename==""?"":$person->middlename . " ") .
 				        			   	   $person->surname,
-        			   	    'role_code'	=> $role->code
+        			   	    'role_code'	=> $user->role
 					);
 
 					$userlogin = array(
+
 							"last_login" => date('Y-m-d h:i:s')
+						
 						);
 
 					$this->user_model->updateUser($userlogin,$user->id);
@@ -112,13 +112,13 @@ class Auth extends CI_Controller {
 
         $this->form_validation->set_rules('last_name', 'Last name', 'required');
         
-        $this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]');
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|callback_isExistingUsername');
 
         $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[8]');
 
         $this->form_validation->set_rules('password_confirmation', 'Password Confirmation', 'trim|required|matches[password]');
 
-        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|callback_isExistingEmail');
 
         $this->form_validation->set_rules('t_and_c', 'Terms and Condition', 'required');
 
@@ -130,6 +130,7 @@ class Auth extends CI_Controller {
         	$this->registrationPage($data);
         	
         }else{
+
         	$user = $this->user_model->getUserByUsername($this->input->post("username"));
 
         	if(!empty($user)){
@@ -147,17 +148,7 @@ class Auth extends CI_Controller {
 
 			}else{
 
-				$roles = $this->user_model->getRoleByRoleCode('STUDENT');
-
-				$role = "";
-
-				if(!empty($this->user_model->getRoleByRoleCode('STUDENT'))){
-
-					$role = $roles[0];
-
-				}
-
-	        	$this->user_model->registerUser($this->input->post(), $role->id);
+	        	$this->user_model->registerUser($this->input->post(), STUDENT);
 
 	        	$this->session->set_flashdata('message', 'Registration success! Please check your email to validate your account.');
 				
@@ -183,7 +174,7 @@ class Auth extends CI_Controller {
 		
 		$this->email->subject('Email Test');
 		
-		$this->email->message('Testing the email class.');
+		$this->email->message(emailRegistrationBody());
 		
 		if(!$this->email->send()){
 			return false;
@@ -212,5 +203,38 @@ class Auth extends CI_Controller {
 
 	  	$this->loginPage();
 
+	}
+
+	public function isExistingUsername($str)
+	{	
+		$user = $this->user_model->getUserByUsername($str);
+
+		if(!empty($user)){
+
+			$this->form_validation->set_message('isExistingUsername', 'Username already in use. Please try another one.');
+
+			return FALSE;
+
+		}else{
+
+			return TRUE;
+
+		}
+	}
+
+	public function isExistingEmail($str)
+	{	
+
+		if(!empty($this->user_model->isEmailExist($str))){
+
+			$this->form_validation->set_message('isExistingEmail', "Email address already in use. Please try another one.");
+
+			return FALSE;
+
+		}else{
+
+			return TRUE;
+			
+		}
 	}
 }

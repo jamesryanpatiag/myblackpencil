@@ -82,10 +82,42 @@
                     data.message + 
                 "</p>" +
               "</div>";
-
-
   }
 
+  function getTutorClassPage(){
+      var form_data = {
+            status: $('#classStatus').val()
+        };
+      $.post("<?php echo site_url('modules/tutorClassesPage'); ?>", form_data, function(data){ 
+              $('.box').html(data);
+              $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+              });
+        });
+  }
+
+  function getCompletedClassPage(){
+      var form_data = {
+            status: $('#classStatus').val()
+        };
+      $.post("<?php echo site_url('modules/completedClassPage'); ?>", form_data, function(data){ 
+              $('.box').html(data);
+              $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+              });
+        });
+  }
+  
   $(document).ready(function(){
       
       $('#submitRefundClass').click(function() {
@@ -135,10 +167,6 @@
         return false;
       });
 
-      $('#notes').on('hidden.bs.modal', function () {
-          location.reload();
-      })
-
       //CHANGING CLASS STATUS
       $('#submitChangeStatus').click(function() {
         var form_data = {
@@ -163,10 +191,6 @@
         return false;
       });
 
-      $('#changeStatus').on('hidden.bs.modal', function () {
-          location.reload();
-      })
-
       //ASSIGNING TUTOR
       $('#submitAssignTutor').click(function() {
           var form_data = {
@@ -190,8 +214,16 @@
           return false;
       });
 
+      $('#changeStatus').on('hidden.bs.modal', function () {
+        getTutorClassPage();
+      });
+
       $('#assignTutor').on('hidden.bs.modal', function () {
-          location.reload();
+          if($("#classStatus").val()=="COMPLETED"){
+            getCompletedClassPage();
+          }else{
+            getTutorClassPage(); 
+          }
       })
 
       $('#refundClass').on('hidden.bs.modal', function () {
