@@ -165,7 +165,7 @@ class Auth extends CI_Controller {
 		
 		$this->email->subject('Welcome to My Black Pencil');
 		
-		$this->email->message(emailActivationBody($username);
+		$this->email->message(emailActivationBody($username));
 		
 		if(!$this->email->send()){
 
