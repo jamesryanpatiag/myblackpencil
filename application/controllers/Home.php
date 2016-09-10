@@ -8,6 +8,8 @@ class Home extends CI_Controller {
 		$data["isRegisterLinkVisible"] = true;
 
 		$data["isLoginLinkVisible"] = true;
+
+		$data["isHome"] = true;
 		
 		$data["title"] = "Homepage";
 		

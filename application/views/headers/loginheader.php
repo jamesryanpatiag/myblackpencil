@@ -82,12 +82,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <?php if($isLoginLinkVisible){?>
+                    <?php if($isLoginLinkVisible && (!isset($isHome) || !$isHome)){?>
                     <li>
                         <a href="<?php echo site_url('auth'); ?>">Login</a>
                     </li>
                     <?php }?>
-                    <?php if($isRegisterLinkVisible){?>
+                    <?php if($isRegisterLinkVisible && (!isset($isHome) || !$isHome)){?>
                     <li>
                         <a href="<?php echo site_url('auth/registrationPage');?>">Register</a>
                     </li>

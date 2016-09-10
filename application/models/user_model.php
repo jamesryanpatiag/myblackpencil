@@ -26,7 +26,11 @@
 			
 			$this->db->insert("user", $user_data);
 			
-			$this->addPerson($data, $this->db->insert_id());
+            $id = $this->db->insert_id();
+			
+            $this->addPerson($data, $id);
+
+            return $id;
         }
 
         public function addPerson($data, $userId){

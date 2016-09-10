@@ -9,6 +9,20 @@
         <div class="container">
             <div class="row" style="margin-top:100px">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                    <?php if(isset($message) && $message != null){ ?>
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                            <?php echo $message;?>
+                          </div>
+                    <?php } ?>
+                    <?php if(isset($account_activated)){ ?>
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i> Success!</h4>
+                            Your account is now activated. You can now try to login.
+                          </div>
+                    <?php }?>
                     <?php echo form_open('auth/login'); ?>
                         <fieldset>
                             <h2>Please Sign In</h2>

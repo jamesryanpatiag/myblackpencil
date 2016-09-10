@@ -55,6 +55,13 @@ class Auth extends CI_Controller {
         		$data["message"] = "Username doesn't exist.";
 
     			$this->loginPage($data);
+
+			}else if($users[0]->is_verified == 0){
+
+				$data["message"] = "Your account is not yet activated. Please check your email for the instructions.";
+
+    			$this->loginPage($data);				
+
     		}else{
 
 				$user = $users[0];
@@ -131,13 +138,13 @@ class Auth extends CI_Controller {
         	
         }else{
 
-        	$user = $this->user_model->getUserByUsername($this->input->post("username"));
+        	$id = $this->user_model->registerUser($this->input->post(), STUDENT);
 
-        	$this->user_model->registerUser($this->input->post(), STUDENT);
+			$users = $this->user_model->getUserById($id);        	
 
-        	$this->session->set_flashdata('message', 'Registration success! Please check your email to validate your account.');
-			
-        	if($this->sendSuccessEmail($this->input->post("email"),$user->username)==false){
+        	$this->session->set_flashdata('message', 'You are successfully registered. Please check your email to validate your account');
+		
+        	if($this->sendSuccessEmail($this->input->post("email"),$users[0]->username,$users[0]->id)==false){
 
 				$this->load->view('errors/html/error_emai_settings');
         	
@@ -150,7 +157,7 @@ class Auth extends CI_Controller {
         }
 	}
 
-	public function sendSuccessEmail($email,$username){
+	public function sendSuccessEmail($email,$username,$userid){
 
 		$this->email->from('noreply@myblackpencil.com', '');
 
@@ -158,7 +165,9 @@ class Auth extends CI_Controller {
 		
 		$this->email->subject('Welcome to My Black Pencil');
 		
-		$this->email->message(emailRegistrationBody());
+		$siteurl = base_url() . "auth/verifyUser/" . md5(date("Y-m-d")) . "/" . $userid;
+
+		$this->email->message(emailRegistrationBody($username,$siteurl));
 		
 		if(!$this->email->send()){
 			return false;
@@ -195,7 +204,7 @@ class Auth extends CI_Controller {
 
 		if(!empty($user)){
 
-			$this->form_validation->set_message('isExistingUsername', 'Username already in use. Please try another one.');
+			$this->form_validation->set_message('isExistingUsername', 'Username already exists');
 
 			return FALSE;
 
@@ -211,7 +220,7 @@ class Auth extends CI_Controller {
 
 		if(!empty($this->user_model->isEmailExist($str))){
 
-			$this->form_validation->set_message('isExistingEmail', "Email address already in use. Please try another one.");
+			$this->form_validation->set_message('isExistingEmail', "Email Address already exists");
 
 			return FALSE;
 
@@ -220,5 +229,19 @@ class Auth extends CI_Controller {
 			return TRUE;
 			
 		}
+	}
+
+	public function verifyUser($hash, $userid){
+
+		$data = array(
+				"is_verified" => 1
+			);
+
+		$this->user_model->updateUser($data, $userid);
+
+		$data["account_activated"] = true;
+
+		$this->loginPage($data);
+
 	}
 }
