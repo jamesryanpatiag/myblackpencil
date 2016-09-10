@@ -23,6 +23,15 @@ function emailRegistrationBody($username, $siteurl){
 				<body>
 					<h3>Please click the link below to activate your account:</h3>
 					<p><a href='".$siteurl."'>" . $siteurl . "</a></p>
+				</body>
+			</html>";
+
+}
+
+function emailActivationBody($username){
+
+	return "<html>
+				<body>
 					<h3>Hi " . $username . ",</h3>
 					<p>You can now log in to your My Black Pencil to update your profile and add your classes. To log in, just enter your username and the password you have chosen.</p>  
 					<p>We would like to remind you of the following:</p>				

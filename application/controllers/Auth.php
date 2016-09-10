@@ -157,13 +157,34 @@ class Auth extends CI_Controller {
         }
 	}
 
-	public function sendSuccessEmail($email,$username,$userid){
+	public function sendTermsEmail($email, $username){
 
 		$this->email->from('noreply@myblackpencil.com', '');
 
 		$this->email->to($email);
 		
 		$this->email->subject('Welcome to My Black Pencil');
+		
+		$this->email->message(emailActivationBody($username);
+		
+		if(!$this->email->send()){
+
+			return false;
+		
+		}else{
+		
+			return true;
+		
+		}
+	}
+
+	public function sendSuccessEmail($email,$username,$userid){
+
+		$this->email->from('noreply@myblackpencil.com', '');
+
+		$this->email->to($email);
+		
+		$this->email->subject('Registration Successful!');
 		
 		$siteurl = base_url() . "auth/verifyUser/" . md5(date("Y-m-d")) . "/" . $userid;
 
@@ -177,10 +198,15 @@ class Auth extends CI_Controller {
 	}
 
 	public function isPasswordValid($password, $hash){
+
 		if(password_verify($password, $hash)){
+		
 			return true;
+		
 		}else{
+		
 			return false;
+		
 		}	
 	}
 
@@ -238,6 +264,10 @@ class Auth extends CI_Controller {
 			);
 
 		$this->user_model->updateUser($data, $userid);
+
+		$users = $this->user_model->getUserById($userid);
+
+		$this->sendTermsEmail($users[0]->email,$users[0]->username);
 
 		$data["account_activated"] = true;
 
