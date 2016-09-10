@@ -133,46 +133,30 @@ class Auth extends CI_Controller {
 
         	$user = $this->user_model->getUserByUsername($this->input->post("username"));
 
-        	if(!empty($user)){
+        	$this->user_model->registerUser($this->input->post(), STUDENT);
 
-        		$data["message"] = "Username already in use. Please try another one.";
+        	$this->session->set_flashdata('message', 'Registration success! Please check your email to validate your account.');
+			
+        	if($this->sendSuccessEmail($this->input->post("email"),$user->username)==false){
 
-        		$this->registrationPage($data);
-
-    		}else if(!empty($this->user_model->isEmailExist($this->input->post("email")))){
-
-				$data["message"] = "Email address already in use. Please try another one.";
-
-        		$this->registrationPage($data);
-
-
-			}else{
-
-	        	$this->user_model->registerUser($this->input->post(), STUDENT);
-
-	        	$this->session->set_flashdata('message', 'Registration success! Please check your email to validate your account.');
-				
-	        	if($this->sendSuccessEmail($this->input->post("email"))==false){
-
-					$this->load->view('errors/html/error_emai_settings');
-	        	
-	        	}else{
-	        	
-	        		redirect(current_url());
-	        	
-	        	}
-			}
+				$this->load->view('errors/html/error_emai_settings');
+        	
+        	}else{
+        	
+        		redirect(current_url());
+        	
+        	}
 			//$this->registrationPage($data);
         }
 	}
 
-	public function sendSuccessEmail($email){
+	public function sendSuccessEmail($email,$username){
 
-		$this->email->from('admin@myblackpencil.com', 'My Black Pencil Admin');
+		$this->email->from('noreply@myblackpencil.com', '');
 
 		$this->email->to($email);
 		
-		$this->email->subject('Email Test');
+		$this->email->subject('Welcome to My Black Pencil');
 		
 		$this->email->message(emailRegistrationBody());
 		
