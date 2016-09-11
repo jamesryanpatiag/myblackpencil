@@ -1,5 +1,4 @@
 <div class="wrapper">
-
   <?php $this->view("dashboard/common/sub-header"); ?>
   <!-- Left side column. contains the logo and sidebar -->
   <?php $this->view("dashboard/common/sidebar");?>
@@ -106,6 +105,9 @@
                           <?php if(!isset($user)){ ?>
                       <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?php echo set_value('email', isset($user->email)) ? $user->email : ''; ?>">
                       <?php } else { ?>
+                          <input type="hidden" class="form-control" id="email" name="email" value="<?php echo $user->email; ?>">    
+                           <input type="hidden" class="form-control" id="username" name="username" value="<?php echo $user->username; ?>">    
+                          <input type="hidden" class="form-control" id="userid" name="userid" value="<?php echo $user->id; ?>">
                           <label>: <?php echo $user->email; ?></label>
                       <?php } ?>
                       <span class="error-mess"><?php echo form_error('email'); ?></span>
@@ -121,8 +123,8 @@
                           <option value="ADMINISTRATOR" <?php if(isset($user) && $user->role=='ADMINISTRATOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'ADMINISTRATOR'); ?> >Administrator</option>
                       </select>
                       <?php } else { ?>
-                        <input type="hidden" id="role" name="role" value="TUTOR" />
-                          <label>: <?php echo TUTOR; ?></label>
+                          <input type="hidden" id="role" name="role" value="TUTOR" />
+                          <label>: <?php echo $user->role; ?></label>
                       <?php } ?>
                       <span class="error-mess"><?php echo form_error('role'); ?></span>
                     </div>

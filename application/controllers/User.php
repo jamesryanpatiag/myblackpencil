@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
 
+	public 	$isEdit = "false";
+
 	public function addUser(){
 
 		$this->validateUser();
@@ -22,16 +24,9 @@ class User extends CI_Controller {
         	$this->session->set_flashdata('message', 'Registration success!');
 
         	$this->user_page($this->input->post('module'));
-			
-    //     	if($this->sendSuccessEmail($this->input->post("email"))==false){
-
-				// $this->load->view('errors/html/error_emai_settings');
         	
-    //     	}else{
+        	$this->userpage($this->input->post('role'), $this->input->post('userid'));
         	
-        		redirect(current_url());
-        	
-        	// }
         }
 
 	}
@@ -40,27 +35,37 @@ class User extends CI_Controller {
 
 		$this->validateUser();
 
+		$this->isEdit = "true";
+
 		if ($this->form_validation->run() == FALSE){
 
-			$this->userpage($this->input->post('module'));
+			$this->userpage($this->input->post('module'), $this->input->post('userid'));
 
         }else{
 
-        	$data = $this->input->post();
+        	$person = array(
+        			"firstname" 	=> $this->input->post('first_name'),
+        			"middlename" 	=> $this->input->post('middlename'),
+    				"surname" 		=> $this->input->post('last_name'),
+    				"dob"			=> $this->input->post('dob'),
+					"gender"		=> $this->input->post('gender'),
+        		);
 
-        	$this->user_model->updateUser($data, $this->input->post('role'));
+        	$user = array(
+        			"username"		=> $this->input->post('username'),
+        			"role"			=> $this->input->post('role'),
+        		);
 
-        	$this->session->set_flashdata('message', 'Registration success!');
+        	$this->user_model->updateUser($user, $this->input->post('userid'));
+
+        	$this->user_model->updatePerson($person, $this->input->post('userid'));
+
+        	$this->session->set_flashdata('message', 'Save Success!');
 			
-    //     	if($this->sendSuccessEmail($this->input->post("email"))==false){
+        	$data["user"] = $this->user_model->getUserById($this->input->post('userid'))[0];
+        	
+        	$this->userpage($this->input->post('role'), $this->input->post('userid'));
 
-				// $this->load->view('errors/html/error_emai_settings');
-        	
-    //     	}else{
-        	
-        		redirect(current_url());
-        	
-        	// }
         }
 
 	}
@@ -69,7 +74,7 @@ class User extends CI_Controller {
 	{	
 		$user = $this->user_model->getUserByUsername($str);
 
-		if(!empty($user)){
+		if(!empty($user) && $this->isEdit == "false"){
 
 			$this->form_validation->set_message('isExistingUsername', 'Username already in use. Please try another one.');
 
@@ -83,9 +88,9 @@ class User extends CI_Controller {
 	}
 
 	public function isExistingEmail($str)
-	{	
+	{		
 
-		if(!empty($this->user_model->isEmailExist($str))){
+		if(!empty($this->user_model->isEmailExist($str)) && $this->isEdit == "false"){
 
 			$this->form_validation->set_message('isExistingEmail', "Email address already in use. Please try another one.");
 
@@ -102,7 +107,7 @@ class User extends CI_Controller {
 
 		sessionChecker();
 
-		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
+		permissionChecker(array(STUDENT, ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = $module;
 

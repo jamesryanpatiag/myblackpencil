@@ -57,6 +57,14 @@
             
         }
 
+        public function updatePerson($data, $userid){
+
+            $this->db->where('userid', $userid);
+
+            $this->db->update('person', $data); 
+
+        }
+
         public function getUsersByRole($role){
 
 
