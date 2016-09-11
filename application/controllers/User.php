@@ -3,7 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
 
-	public 	$isEdit = "false";
+	private $isEdit = "false";
+	private $isSuccess = "false";
 
 	public function addUser(){
 
@@ -24,6 +25,8 @@ class User extends CI_Controller {
         	$this->session->set_flashdata('message', 'Registration success!');
 
         	$this->user_page($this->input->post('module'));
+
+        	$this->isSuccess = "true";
         	
         	$this->userpage($this->input->post('role'), $this->input->post('userid'));
         	
@@ -63,10 +66,28 @@ class User extends CI_Controller {
         	$this->session->set_flashdata('message', 'Save Success!');
 			
         	$data["user"] = $this->user_model->getUserById($this->input->post('userid'))[0];
-        	
+
+        	$this->isSuccess = "true";
+
         	$this->userpage($this->input->post('role'), $this->input->post('userid'));
 
         }
+
+	}
+
+	public function isDOBValid($str){
+
+		if(strtotime($str)>strtotime(date('Y-m-d'))){
+
+			$this->form_validation->set_message('isDOBValid', 'Date of Birth must not greater than the current date.');
+
+			return FALSE;
+
+		}else {
+
+			return TRUE;
+
+		}
 
 	}
 
@@ -115,6 +136,10 @@ class User extends CI_Controller {
 		
 		$data["sub_title"] = $module;
 
+		$data["isSuccess"] = $this->isSuccess;
+
+		$this->isSuccess = "false";
+
 		if($id!=null){
 
 			$data["user"] = $this->user_model->getUserById($id)[0];
@@ -136,6 +161,8 @@ class User extends CI_Controller {
         $this->form_validation->set_rules('last_name', 'Last name', 'required');
         
         $this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|callback_isExistingUsername');
+
+        $this->form_validation->set_rules('dob', 'Date of Birth', 'callback_isDOBValid');
 
         $this->form_validation->set_rules('email', 'Email', 'required|callback_isExistingEmail');
 

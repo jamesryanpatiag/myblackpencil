@@ -32,7 +32,15 @@
           }
         ?>
           <div class="col-md-12 col-lg-12">
-              <input type="submit" class="btn btn-success" value="Save Details" >
+              <input type="submit" class="btn btn-info" value="Save Details" >
+              <br/><br/>
+                <?php if(isset($isSuccess) && $isSuccess == "true"){ ?>
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Success!</h4>
+                    Account has been successfully saved.
+                </div>
+                <?php } ?>
           </div>
           <br/><br/><br/>
           <div class="col-md-6 col-lg-6">
@@ -64,8 +72,9 @@
                           <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                           </div>
-                          <input type="text" name="dob" class="form-control pull-right" id="dob" value="<?php echo set_value('dob', isset($user->dob)) ? $user->dob : ''; ?>">
+                          <input type="text" name="dob" class="form-control pull-right" id="dob" value="<?php echo set_value('dob', isset($user->dob)) ? $user->dob : date('Y-m-d'); ?>">
                         </div>
+                        <span class="error-mess"><?php echo form_error('dob'); ?></span>
                     </div>
                     <div class="form-group">
                       <label for="gender">Gender</label>
@@ -149,7 +158,7 @@
   $(function(){
         $('#dob').datepicker({
           format: 'yyyy-mm-dd',
-          autoclose: true
+          autoclose: true,
         });
   })
 </script>

@@ -234,6 +234,14 @@ class Modules extends CI_Controller {
 
 	}
 
+	public function refundedClassPage(){
+
+		$data["list"] = $this->module->getRefundedClasses();	
+		
+		$this->load->view("dashboard/tables/refundedTable",$data);
+
+	}
+
 	public function completedClassPage(){
 
 		$data["list"] = $this->module->getClassByStatus($this->input->post('status'));	

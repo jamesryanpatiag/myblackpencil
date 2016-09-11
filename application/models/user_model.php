@@ -40,7 +40,7 @@
     			"email" => $data["email"],
     			"firstname" => $data["first_name"],
                 "middlename" => isset($data["middlename"]) ? $data["middlename"] : "",
-                "dob" => isset($data["dob"]) ? $data["dob"] : "",
+                "dob" => isset($data["dob"]) ? $data["dob"] : null,
                 "gender" => isset($data["gender"]) ? $data["gender"] : "",
     			"surname" => $data["last_name"],
 				"created_by" => 1

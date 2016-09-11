@@ -87,18 +87,16 @@
 
             $this->db->join("refunded r", "c.id = r.classid", "inner");
 
-            $this->db->join("user u", "c.tutor_id = u.id", "inner");
+            $this->db->join("user u", "c.tutor_id = u.id", "left");
 
             $this->db->where("c.status", 'REFUNDED');
 
             if($userid != ""){
-
+                
                 $this->db->where("c.tutor_id", $userid);
 
             }
-
             $query = $this->db->get();
-
             return $query->result();
 
         }

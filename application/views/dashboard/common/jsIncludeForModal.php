@@ -101,6 +101,23 @@
         });
   }
 
+  function getRefundedClassPage(){
+        var form_data = {
+            status: $('#classStatus').val()
+        };
+        $.post("<?php echo site_url('modules/refundedClassPage'); ?>", form_data, function(data){ 
+              $('.box').html(data);
+              $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+              });
+        }); 
+  }
+
   function getCompletedClassPage(){
       var form_data = {
             status: $('#classStatus').val()
@@ -215,7 +232,11 @@
       });
 
       $('#changeStatus').on('hidden.bs.modal', function () {
-        getTutorClassPage();
+        if($("#classStatus").val()=="REFUNDED"){
+          getRefundedClassPage();
+        }else{
+          getTutorClassPage(); 
+        }
       });
 
       $('#assignTutor').on('hidden.bs.modal', function () {
