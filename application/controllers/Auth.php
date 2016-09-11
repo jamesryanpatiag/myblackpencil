@@ -157,7 +157,21 @@ class Auth extends CI_Controller {
         }
 	}
 
+	public function getEmailConfiguration(){
+
+		$config['charset'] = 'utf-8';
+
+		$config['wordwrap'] = TRUE;
+		
+		$config['mailtype'] = 'html';
+		
+		return $config;
+
+	}
+
 	public function sendTermsEmail($email, $username){
+
+		$this->email->initialize($this->getEmailConfiguration());
 
 		$this->email->from('noreply@myblackpencil.com', '');
 
@@ -179,6 +193,8 @@ class Auth extends CI_Controller {
 	}
 
 	public function sendSuccessEmail($email,$username,$userid){
+
+		$this->email->initialize($this->getEmailConfiguration());	
 
 		$this->email->from('noreply@myblackpencil.com', '');
 
