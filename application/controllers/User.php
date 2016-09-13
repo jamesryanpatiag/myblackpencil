@@ -128,7 +128,7 @@ class User extends CI_Controller {
 
 		sessionChecker();
 
-		permissionChecker(array(STUDENT, ADMINISTRATOR, MANAGER), true);
+		permissionChecker(array(STUDENT, TUTOR, ADMINISTRATOR, MANAGER), true);
 
 		$data["module"] = $module;
 

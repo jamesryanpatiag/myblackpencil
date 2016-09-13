@@ -132,7 +132,7 @@
                           <option value="ADMINISTRATOR" <?php if(isset($user) && $user->role=='ADMINISTRATOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'ADMINISTRATOR'); ?> >Administrator</option>
                       </select>
                       <?php } else { ?>
-                          <input type="hidden" id="role" name="role" value="TUTOR" />
+                          <input type="hidden" id="role" name="role" value="<?php echo $user->role; ?> " />
                           <label>: <?php echo $user->role; ?></label>
                       <?php } ?>
                       <span class="error-mess"><?php echo form_error('role'); ?></span>
