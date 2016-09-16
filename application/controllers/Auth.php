@@ -76,7 +76,7 @@ class Auth extends CI_Controller {
 					        'fullname'	=> $person->firstname . " " . 
 					        			   ($person->middlename==""?"":$person->middlename . " ") .
 				        			   	   $person->surname,
-        			   	    'role_code'	=> $user->role
+        			   	    'role_code'	=> trim($user->role)
 					);
 
 					$userlogin = array(

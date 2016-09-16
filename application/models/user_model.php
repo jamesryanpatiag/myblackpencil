@@ -72,7 +72,7 @@
 
             $this->db->from("user u");
 
-            $this->db->join("person p", "u.id = p.userid", "inner");
+            $this->db->join("person p", "u.id = p.userid", "INNER");
 
             $this->db->where("u.role", $role);
 

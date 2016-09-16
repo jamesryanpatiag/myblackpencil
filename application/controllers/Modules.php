@@ -226,6 +226,26 @@ class Modules extends CI_Controller {
 
 	}
 
+	public function students(){
+
+		sessionChecker();
+
+		permissionChecker(array(ADMINISTRATOR, MANAGER), true);
+
+		$data["module"] = "students";
+		
+		$data["page_title"] = "Students";
+
+		$data["list"] = $this->user_model->getUsersByRole('STUDENT');
+
+		$this->load->view("dashboard/common/header");
+
+		$this->load->view("dashboard/modules/students",$data);
+
+		$this->load->view("dashboard/common/footer");
+
+	}
+
 	public function tutorClassesPage(){
 
 		$data["list"] = $this->module->getClassByStatus($this->input->post('status'));	
@@ -266,6 +286,22 @@ class Modules extends CI_Controller {
         	echo validation_errors();
 
         }else{
+
+        	$config['upload_path'] = './uploads/';
+			
+			$config['allowed_types'] = 'gif|jpg|png|pdf';
+			
+			$config['max_size'] = 2048;
+
+			$this->load->library('upload', $config);
+
+			var_dump("tae");
+
+			exit; 
+
+			$this->upload->do_upload('userfile');
+			
+			var_dump($this->upload->data());
 
         	$this->module->addClass($this->input->post());
 

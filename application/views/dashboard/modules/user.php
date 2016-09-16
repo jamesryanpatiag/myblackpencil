@@ -50,20 +50,19 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                
                   <div class="box-body">
                     <div class="form-group">
                       <label for="first_name">Firstname</label>
-                      <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Firstname" value="<?php echo set_value('first_name', isset($user->firstname)) ? $user->firstname : ''; ?>"  >
+                      <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Firstname" value="<?php echo set_value('first_name', isset($user) && isset($user->firstname) ? $user->firstname : ''); ?>"  >
                       <span class="error-mess"><?php echo form_error('first_name'); ?></span>
                     </div>
                     <div class="form-group">
                       <label for="middlename">Middlename</label>
-                      <input type="text" class="form-control" id="middlename" name="middlename" placeholder="Enter Middlename" value="<?php echo set_value('middlename', isset($user->middlename)) ? $user->middlename : ''; ?>" >
+                      <input type="text" class="form-control" id="middlename" name="middlename" placeholder="Enter Middlename" value="<?php echo set_value('middlename', isset($user) && isset($user->middlename) ? $user->middlename : ''); ?>" >
                     </div>
                     <div class="form-group">
                       <label for="last_name">Surname</label>
-                      <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Surname" value="<?php echo set_value('last_name', isset($user->surname)) ? $user->surname : ''; ?>" >
+                      <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Surname" value="<?php echo set_value('last_name', isset($user) && isset($user->surname) ? $user->surname : ''); ?>" >
                       <span class="error-mess"><?php echo form_error('last_name'); ?></span>
                     </div>
                     <div class="form-group">
@@ -72,7 +71,7 @@
                           <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                           </div>
-                          <input type="text" name="dob" class="form-control pull-right" id="dob" value="<?php echo set_value('dob', isset($user->dob)) ? $user->dob : date('Y-m-d'); ?>">
+                          <input type="text" name="dob" class="form-control pull-right" id="dob" value="<?php echo set_value('dob', isset($user) && isset($user->dob) ? $user->dob : date('Y-m-d')); ?>">
                         </div>
                         <span class="error-mess"><?php echo form_error('dob'); ?></span>
                     </div>
@@ -131,8 +130,13 @@
                           <option value="MANAGER" <?php if(isset($user) && $user->role=='MANAGER'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'MANAGER'); ?> >Manager</option>
                           <option value="ADMINISTRATOR" <?php if(isset($user) && $user->role=='ADMINISTRATOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'ADMINISTRATOR'); ?> >Administrator</option>
                       </select>
+                      <?php } else if($_SESSION['role_code']==MANAGER){ ?>
+                      <select type="text" class="form-control" id="role" name="role">
+                          <option value="">-- Select Role --</option>
+                          <option value="TUTOR" <?php if(isset($user) && $user->role=='TUTOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'TUTOR'); ?> >Tutor</option>
+                      </select>
                       <?php } else { ?>
-                          <input type="hidden" id="role" name="role" value="<?php echo $user->role; ?> " />
+                          <input type="hidden" id="role" name="role" value="<?php echo $user->role; ?>" />
                           <label>: <?php echo $user->role; ?></label>
                       <?php } ?>
                       <span class="error-mess"><?php echo form_error('role'); ?></span>

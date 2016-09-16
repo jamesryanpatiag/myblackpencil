@@ -101,11 +101,21 @@
           </a>
         </li>
          <?php } ?>
-         <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
         <li class="<?php if($module=='consultants'){echo 'active';}?> treeview">
           <a href="<?php echo site_url('/modules/consultants');?>">
             <i class="fa fa-users"></i>
             <span>Consultants</span>
+            <span class="pull-right-container">
+            </span>
+          </a>
+        </li>
+        <?php } ?>
+        <?php if(permissionChecker(array(MANAGER, ADMINISTRATOR))) { ?>
+        <li class="<?php if($module=='students'){echo 'active';}?> treeview">
+          <a href="<?php echo site_url('/modules/students');?>">
+            <i class="fa fa-users"></i>
+            <span>Students</span>
             <span class="pull-right-container">
             </span>
           </a>

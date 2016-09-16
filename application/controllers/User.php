@@ -24,7 +24,7 @@ class User extends CI_Controller {
 
         	$this->session->set_flashdata('message', 'Registration success!');
 
-        	$this->user_page($this->input->post('module'));
+        	$data["user"] = null;
 
         	$this->isSuccess = "true";
         	
