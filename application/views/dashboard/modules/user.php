@@ -111,7 +111,7 @@
                     <div class="form-group">
                       <label for="email">Email address</label>
                           <?php if(!isset($user)){ ?>
-                      <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?php echo set_value('email', isset($user->email)) ? $user->email : ''; ?>">
+                      <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="<?php echo set_value('email'); ?>">
                       <?php } else { ?>
                           <input type="hidden" class="form-control" id="email" name="email" value="<?php echo $user->email; ?>">    
                            <input type="hidden" class="form-control" id="username" name="username" value="<?php echo $user->username; ?>">    
@@ -119,7 +119,7 @@
                           <label>: <?php echo $user->email; ?></label>
                       <?php } ?>
                       <span class="error-mess"><?php echo form_error('email'); ?></span>
-                    </div>
+                    </div>  
                     <div class="form-group">
                       <label for="role">Role</label>
                       <?php if($_SESSION['role_code']==ADMINISTRATOR){ ?>
@@ -130,7 +130,7 @@
                           <option value="MANAGER" <?php if(isset($user) && $user->role=='MANAGER'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'MANAGER'); ?> >Manager</option>
                           <option value="ADMINISTRATOR" <?php if(isset($user) && $user->role=='ADMINISTRATOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'ADMINISTRATOR'); ?> >Administrator</option>
                       </select>
-                      <?php } else if($_SESSION['role_code']==MANAGER){ ?>
+                      <?php } else if($_SESSION['role_code']==MANAGER && $isCurrentUser == false){ ?>
                       <select type="text" class="form-control" id="role" name="role">
                           <option value="">-- Select Role --</option>
                           <option value="TUTOR" <?php if(isset($user) && $user->role=='TUTOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'TUTOR'); ?> >Tutor</option>

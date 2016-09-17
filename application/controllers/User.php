@@ -140,6 +140,14 @@ class User extends CI_Controller {
 
 		$this->isSuccess = "false";
 
+		$data["isCurrentUser"] = true; 
+
+		if($id == null || $id != $_SESSION["user_id"]){
+
+			$data["isCurrentUser"] = false;
+
+		}
+
 		if($id!=null){
 
 			$data["user"] = $this->user_model->getUserById($id)[0];
