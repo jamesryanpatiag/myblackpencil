@@ -75,6 +75,24 @@
                 </div>
               </div>
 
+              <!-- UPLOADED FILES -->
+              <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Uploaded Files</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered" id="table_class_uploaded">
+                <tbody><tr>
+                  <th style="width: 10px">#</th>
+                  <th>File</th>
+                  <th style="width: 40px">Action</th>
+                </tr>
+              </tbody></table>
+            </div>
+          </div>
+
+
           </div>
 
       </div>

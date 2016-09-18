@@ -66,7 +66,14 @@ function getStatusByCode($code){
 }
 
 function getStatus(){
-	return array(
+	$role = $_SESSION['role_code'];
+	if($role===TUTOR){
+		return array(
+			'IN-PROGRESS' 		=> 'In-Progress',
+			'COMPLETED' 		=> 'Completed' 
+		);	
+	}else{
+		return array(
 			'PENDING'	 		=> 'Pending',
 			'INITIAL-REVIEW' 	=> 'Initial Review',
 			'BATCH-OUT'			=> 'Batch-out',
@@ -75,6 +82,9 @@ function getStatus(){
 			'REFUNDED'			=> 'Refunded',
 			'ESCALATION'		=> 'Escalation' 
 		);
+	}
+
+	
 }
 
 function getUsernameById($userid){

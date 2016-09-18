@@ -15,9 +15,27 @@ class Modules extends CI_Controller {
 		if(!empty($classes)){
 
 			$class = $classes[0];
-		} 
 
-		echo json_encode($class);	
+			$files = array();
+
+			$uploadedFiles = ($this->file->getFileByReferenceId($class->id, "CLASS")); 
+
+			foreach($uploadedFiles as $u)
+			{
+				$file = array(
+						"id" => $u->id,
+						"filename" => $u->filename
+					);
+
+				array_push($files, $file);
+			}
+		}	
+
+		$x = array(
+				"class" => $class,
+				"files"	=> $files
+			);
+		echo json_encode($x);	
 	
 	}
 
@@ -87,7 +105,7 @@ class Modules extends CI_Controller {
 
 		$data["page_title"] = "Batch-Out Classes";
 
-		$data["list"] = $this->module->getClassByStatus('BATCH-OUT');
+		$data["list"] = $this->module->getClassByStatus('BATCH-OUT', true);
 
 		$data["tutors"] = $this->user_model->getUsersByRole('TUTOR');
 		
@@ -248,7 +266,7 @@ class Modules extends CI_Controller {
 
 	public function tutorClassesPage(){
 
-		$data["list"] = $this->module->getClassByStatus($this->input->post('status'));	
+		$data["list"] = $this->module->getClassByStatus($this->input->post('status'), true);	
 		
 		$this->load->view("dashboard/tables/tutorClassesTables",$data);
 
@@ -287,25 +305,9 @@ class Modules extends CI_Controller {
 
         }else{
 
-        	$config['upload_path'] = './uploads/';
-			
-			$config['allowed_types'] = 'gif|jpg|png|pdf';
-			
-			$config['max_size'] = 2048;
+    		$classid = $this->module->addClass($this->input->post());
 
-			$this->load->library('upload', $config);
-
-			var_dump("tae");
-
-			exit; 
-
-			$this->upload->do_upload('userfile');
-			
-			var_dump($this->upload->data());
-
-        	$this->module->addClass($this->input->post());
-
-        	echo "YES";
+    		echo "YES";
 
         }
 
@@ -483,4 +485,135 @@ class Modules extends CI_Controller {
 		echo json_encode($this->module->getRefundDataByClassId($classid));
 
 	}
+
+	public function uploadfile(){
+
+		$hasError = false;
+    	$fileName = "";
+    	$content = "";
+    	$content_type = "";
+
+    	$response = $this->input->post();
+
+    	if(!empty($_FILES['userfile']['name'])){
+
+			$uploadpath = '/upload/';
+
+	    	chmod($uploadpath, 0777);
+
+	    	$config['upload_path'] = $uploadpath;
+			
+			$config['allowed_types'] = '*';
+			
+			$config['max_size'] = 2048;
+
+			$this->load->library('upload', $config);
+
+			$this->upload->initialize($config);
+
+			if ( ! $this->upload->do_upload('userfile')) 
+	        {
+                $response = $this->upload->display_errors();
+
+                $hasError = true;
+	        }
+	        else
+	        {
+	        	$fileName = $_FILES['userfile']['name'];
+
+				$tmpName  = $_FILES['userfile']['tmp_name'];
+
+				$content_type = $_FILES['userfile']['type'];
+
+				$fp      = fopen($tmpName, 'r');
+				
+				$content = fread($fp, filesize($tmpName));
+
+				fclose($fp);
+
+				$response = $_FILES;
+
+				unlink($uploadpath . $fileName);
+	        }
+
+    	}
+
+    	if(!$hasError){
+
+    		$classid = $this->input->post("classId");
+
+    		if($fileName != "" && $content != ""){
+
+
+				$fileData = array(
+						"referenceid" 	=> $classid,
+						"file_category" => "CLASS",
+						"stored_file" 	=> $content,
+						"filename" 		=> $fileName,
+						"uploaded_by" 	=> $_SESSION["user_id"],
+						"content_type" 	=> $content_type
+					);
+
+				$this->file->saveFile($fileData);
+    		}
+
+		}
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+
+	public function deleteUploadedFile($id){
+
+		$this->file->deleteFileById($id);
+
+		echo "YES";
+
+	}
+
+	public function downloadFileById($id){
+
+		$files = $this->file->getStoredFileById($id);
+
+		if(!empty($files)){
+			
+			$file = $files[0];
+
+			$content = $file->stored_file;
+
+			$type = $file->content_type;
+
+			$filename = $file->filename;
+
+			$size = strlen($content);
+
+			switch(strtolower(substr(strrchr($filename, '.'), 1))) {
+				case 'jpeg':
+				case 'jpg': $mime = 'image/jpg'; break;
+				case 'doc': $mime = 'application/msword'; break;
+				case 'docx': $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+				case 'pdf': $mime = 'application/pdf'; break;
+				case 'xls': $mime = 'application/msexcel'; break;
+				case 'xlsx': $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+				case 'ppt': $mime = 'application/powerpoint'; break;
+				case 'png': $mime = 'image/png'; break;
+				default: $mime = 'application/force-download';
+			}
+
+			header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($filename)).' GMT');
+			header('Cache-Control: private',false);
+			header('Content-Type: '.$mime);
+			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Length: '.$size);	// provide file size
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			ob_clean();
+			flush();
+			print $content;
+			exit();
+
+		}
+
+
+		
+	}
+
 }

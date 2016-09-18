@@ -26,7 +26,10 @@
                   <div class="input-group-btn">
                     <a href='#' class='btn btn-primary' id="btn_attach_file" title='Attach a file'><span class='fa fa-paperclip'></span></a>
                   </div>
-                  <input type="text=" class="form-control" placeholder="Type message..." id="noteMessage">
+                  <div style="display:none">
+                      <input type="file" id="notesUploadFile" name="notesUploadFile" />
+                  </div>
+                  <input type="text" class="form-control" placeholder="Type message..." id="noteMessage">
                   <div class="input-group-btn">
                     <button type="submit" id="submitAddNotes" class="btn btn-success"><i class="fa fa-plus"></i></button>
                   </div>
@@ -59,3 +62,14 @@
       overflow-y: auto;
   }
 </style>
+<script>
+
+  $(function(){
+    
+      $("#btn_attach_file").on('click', function(){
+        $("#notesUploadFile").trigger('click');    
+      })
+
+  })
+
+</script>

@@ -83,6 +83,12 @@
                                     <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" title="Edit" onClick="setDataClass('<?php echo $item->id;?>')" data-target="#editClass" >
                                         <span class="fa fa-pencil"></button>
                                     <?php } ?>
+                                     <?php if(permissionChecker(array(STUDENT, MANAGER, ADMINISTRATOR))) { ?>
+                                    <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" title="Edit" onClick="setUploadClassId('<?php echo $item->id;?>')" data-target="#uploadFile" >
+                                        <span class="fa fa-upload"></button>
+
+                                          
+                                    <?php } ?>
                                     <?php if(permissionChecker(array(STUDENT))) { ?>
                                     <button type="button"
                                         data-toggle="modal" 
@@ -131,6 +137,7 @@
   <?php $this->view("dashboard/common/footer-html"); ?>
   <div class="control-sidebar-bg"></div>
 </div>
+<?php $this->view("dashboard/modals/uploadFileModal"); ?>
 <?php $this->view("dashboard/modals/refundModal"); ?>
 <?php $this->view("dashboard/modals/changeStatus"); ?>
 <?php $this->view("dashboard/modals/notesModal"); ?>
@@ -175,38 +182,76 @@ function setDataClass(id){
         data: form_data,  
         success: function(msg) {
           var result = JSON.parse(msg);
-          $('#edit_id').val(result["id"]);
-          $("#edit_student_url").val(result["url"]);
-          $("#edit_type").val(result["type"]);
-          $('#edit_student_username').val(result["student_username"]),
-          $('#edit_student_password').val(result["student_password"]),
-          $('#edit_student_course').val(result["course"]),
-          $('#edit_student_description').val(result["description"]),
-          $("#edit_start_dtpicker").val(result["start_date"]),
-          $("#edit_end_dtpicker").val(result["end_date"]),
-          $("#edit_student_level").val(result["educational_level_code"])  
+          $('#edit_id').val(result["class"]["id"]);
+          $("#edit_student_url").val(result["class"]["url"]);
+          $("#edit_type").val(result["class"]["type"]);
+          $('#edit_student_username').val(result["class"]["student_username"]);
+          $('#edit_student_password').val(result["class"]["student_password"]);
+          $('#edit_student_course').val(result["class"]["course"]);
+          $('#edit_student_description').val(result["class"]["description"]);
+          $("#edit_start_dtpicker").val(result["class"]["start_date"]);
+          $("#edit_end_dtpicker").val(result["class"]["end_date"]);
+          $("#edit_student_level").val(result["class"]["educational_level_code"]);
+
+          $.each(result["files"], function(){
+                $("#table_class_uploaded").append(uploadedFileDataRow(this));                
+          });
         }
     });
 }
 
+function uploadedFileDataRow(item){
+    return "<tr id='uploaded_file_" + item.id + "'>" + 
+              "<td>-</td>" +
+              "<td>" + item.filename + "</td>" +
+              "<td>" + 
+                  "<a href='<?php echo site_url('modules/downloadFileById/'); ?>" + item.id + "'  ><i class='fa fa-download'></i></a>&nbsp;&nbsp;&nbsp;" + 
+                  "<a href='#' onclick='return confirm_delete(" + item.id + ")'><i class='fa fa-trash'></i></a>" + 
+              "</td>" +
+              "</tr>";
+}
+
+function confirm_delete(id){
+
+  if(confirm("Are you sure you want to delete this item?")){
+      $.ajax({
+          url: "<?php echo site_url('modules/deleteUploadedFile/'); ?>" + id,
+          type: 'GET', 
+          success: function(msg) {
+              if (msg == 'YES'){
+                  $('#edit-alert-msg').html('<div class="alert alert-success text-center">File has been successfully deleted</div>');
+              }else{
+                  $('#edit-alert-msg').html('<div class="alert alert-danger">' + msg + '</div>');
+              }
+              $("#uploaded_file_" + id).remove();
+          }
+      });
+  }
+
+}
+
 $(document).ready(function(){
 
+
     $('#submitAddClass').click(function() {
-      var form_data = {
-          student_url: $('#student_url').val(),
-          type: $('#type').val(),
-          student_username: $('#student_username').val(),
-          student_password: $('#student_password').val(),
-          student_course: $('#student_course').val(),
-          student_description: $('#student_description').val(),
-          start_dtpicker: $("#start_dtpicker").val(),
-          end_dtpicker: $("#end_dtpicker").val(),
-          student_level: $("#student_level").val()
-      };
+      
+      var fd = new FormData();
+      fd.append("student_url", $('#student_url').val());
+      fd.append("type", $('#type').val());
+      fd.append("student_username", $('#student_username').val());
+      fd.append("student_password", $('#student_password').val());
+      fd.append("student_course", $('#student_course').val());
+      fd.append("student_description", $('#student_description').val());
+      fd.append("start_dtpicker", $("#start_dtpicker").val());
+      fd.append("end_dtpicker", $("#end_dtpicker").val());
+      fd.append("student_level", $("#student_level").val());
+      
       $.ajax({
           url: "<?php echo site_url('modules/addClass'); ?>",
           type: 'POST',
-          data: form_data,  
+          data: fd,  
+          processData: false,
+          contentType: false,
           success: function(msg) {
               console.log(msg);
               if (msg == 'YES'){
@@ -242,7 +287,7 @@ $(document).ready(function(){
           data: form_data,  
           success: function(msg) {
               if (msg == 'YES'){
-                $('#edit-alert-msg').html('<div class="alert alert-success text-center">Class has been successfully created!</div>');
+                $('#edit-alert-msg').html('<div class="alert alert-success text-center">Class has been successfully updated!</div>');
               }else if (msg == 'NO'){
                   $('#edit-alert-msg').html('<div class="alert alert-danger text-center">Error in sending your message! Please try again later.</div>');
               }else{

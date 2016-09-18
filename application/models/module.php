@@ -4,8 +4,8 @@
         public function __construct()
         {
                 parent::__construct();
-        }
-
+        
+}
         public function addClass($data){
 
 			$class = array(
@@ -24,6 +24,8 @@
 			);		
 
 			$this->db->insert("class", $class);
+
+            return $this->db->insert_id();
         }
 
         public function getClassById($id){
@@ -49,15 +51,15 @@
         	return $query->result();
         }
 
-        public function getClassByStatus($status){
-            
-            if($_SESSION['role_code']==TUTOR){
+        public function getClassByStatus($status, $isNotPerTutor = false){
 
-                $query = $this->db->get_where('class',array('status'=>$status,'tutor_id'=>$_SESSION['user_id']));
+            if($isNotPerTutor || ($_SESSION["role_code"]===MANAGER || $_SESSION["role_code"]===ADMINISTRATOR)){ 
+
+                $query = $this->db->get_where('class',array('status'=>$status));
 
             }else{
 
-                $query = $this->db->get_where('class',array('status'=>$status));
+                $query = $this->db->get_where('class',array('status'=>$status, 'tutor_id'=>$_SESSION['user_id']));
             
             }
             return $query->result();
