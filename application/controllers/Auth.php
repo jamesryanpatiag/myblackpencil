@@ -21,6 +21,19 @@ class Auth extends CI_Controller {
 		$this->load->view('login');
 	}
 
+	function faqs($data = null){
+
+		$data["isRegisterLinkVisible"] = true;
+		
+		$data["isLoginLinkVisible"] = true;
+
+		$data["title"] = "FAQs";
+		
+		$this->load->view('headers/loginheader',$data);
+		
+		$this->load->view('faqs');
+	}
+
 	function registrationPage($data = null){
 
 		$data["isRegisterLinkVisible"] = false;

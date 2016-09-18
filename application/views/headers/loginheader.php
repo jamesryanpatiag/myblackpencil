@@ -71,7 +71,7 @@
                         <a class="hidden-sm hidden-xs" href="#promise">Our Promise</a>
                     </li>
                     <li>
-                        <a class="hidden-sm hidden-xs" href="#faqs">FAQs</a>
+                         <a href="<?php echo site_url('auth/faqs');?>">FAQs</a>
                     </li>
                     <li>
                         <a class="hidden-sm hidden-xs" href="#testimonials">Testimonials</a>
