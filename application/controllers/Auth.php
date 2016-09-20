@@ -215,14 +215,22 @@ class Auth extends CI_Controller {
 		
 		$this->email->subject('Registration Successful!');
 		
-		$siteurl = base_url() . "auth/verifyUser/" . md5(date("Y-m-d")) . "/" . $userid;
+		$url = base_url();
+
+		if(strpos($url, 'index') !== true ) $url = $url . "index.php/";
+
+		$siteurl = $url . "auth/verifyUser/" . md5(date("Y-m-d")) . "/" . $userid;
 
 		$this->email->message(emailRegistrationBody($username,$siteurl));
 		
 		if(!$this->email->send()){
+
 			return false;
+		
 		}else{
+		
 			return true;
+
 		}
 	}
 
