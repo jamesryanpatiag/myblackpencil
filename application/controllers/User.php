@@ -148,6 +148,20 @@ class User extends CI_Controller {
 
 		}
 
+		if($_SESSION['role_code'] != ADMINISTRATOR && $_SESSION['role_code'] != MANAGER){
+
+			if($id!=null){
+
+				if($id != $_SESSION['user_id']){
+
+					show_404();
+
+				}
+
+			}
+
+		}
+
 		if($id!=null){
 
 			$data["user"] = $this->user_model->getUserById($id)[0];

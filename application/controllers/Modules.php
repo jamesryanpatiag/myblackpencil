@@ -394,12 +394,27 @@ class Modules extends CI_Controller {
 
         $this->form_validation->set_rules('student_description', 'Description', 'required');
 
-        $this->form_validation->set_rules('start_dtpicker', 'Start Date', 'required');
+        $this->form_validation->set_rules('start_dtpicker', 'Start Date', 'required|callback_isPresentDate');
 
-        $this->form_validation->set_rules('end_dtpicker', 'End Date', 'required');
+        $this->form_validation->set_rules('end_dtpicker', 'End Date', 'required|callback_isPresentDate');
 		
 		$this->form_validation->set_rules('student_level', 'Level', 'required');
 
+	}
+
+	public function isPresentDate($date)
+	{		
+		if(strtotime($date) < strtotime(date('Y-m-d'))){
+
+			$this->form_validation->set_message('isPresentDate', "Date given must be set as present or future.");
+
+			return FALSE;
+
+		}else{
+
+			return TRUE;
+			
+		}
 	}
 
 	public function assignTutor(){
