@@ -497,15 +497,21 @@ class Modules extends CI_Controller {
 
     	if(!empty($_FILES['userfile']['name'])){
 
-			$uploadpath = '/upload/';
+			$uploadpath = $_SERVER['DOCUMENT_ROOT'].'/upload/';
 
-	    	chmod($uploadpath, 0777);
+			$tempUploadedFile = "tempFile" . date('hhmmss');
+
+			chmod($uploadpath, 0777);
 
 	    	$config['upload_path'] = $uploadpath;
 			
 			$config['allowed_types'] = '*';
 			
 			$config['max_size'] = 2048;
+
+			$config['remove_spaces'] = false;
+
+			$config['file_name'] = $tempUploadedFile;
 
 			$this->load->library('upload', $config);
 
@@ -519,7 +525,11 @@ class Modules extends CI_Controller {
 	        }
 	        else
 	        {
-	        	$fileName = $_FILES['userfile']['name'];
+	        	$uploadedFile = $this->upload->data();
+
+	        	$ext = $uploadedFile['file_ext'];
+
+	        	$filename = $_FILES['userfile']['name'];
 
 				$tmpName  = $_FILES['userfile']['tmp_name'];
 
@@ -531,9 +541,7 @@ class Modules extends CI_Controller {
 
 				fclose($fp);
 
-				$response = $_FILES;
-
-				unlink($uploadpath . $fileName);
+				unlink($uploadpath . $tempUploadedFile . $ext);
 	        }
 
     	}
@@ -542,17 +550,23 @@ class Modules extends CI_Controller {
 
     		$classid = $this->input->post("classId");
 
-    		if($fileName != "" && $content != ""){
+    		if($filename != "" && $content != ""){
 
 
 				$fileData = array(
 						"referenceid" 	=> $classid,
+
 						"file_category" => "CLASS",
+						
 						"stored_file" 	=> $content,
-						"filename" 		=> $fileName,
+						
+						"filename" 		=> $filename,
+						
 						"uploaded_by" 	=> $_SESSION["user_id"],
+						
 						"content_type" 	=> $content_type
 					);
+				
 
 				$this->file->saveFile($fileData);
     		}
