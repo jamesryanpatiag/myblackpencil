@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Quattrocento+Sans);
+/*!
 /*
  * Start Bootstrap - Landing Page (http://startbootstrap.com/)
  * Copyright 2013-2016 Start Bootstrap
@@ -17,7 +19,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+font-family: 'Quattrocento Sans', sans-serif;
     font-weight: 700;
 }
 
