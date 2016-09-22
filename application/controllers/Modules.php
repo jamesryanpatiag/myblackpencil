@@ -637,7 +637,7 @@ class Modules extends CI_Controller {
 			header('Content-Length: '.$size);	// provide file size
 			//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         	//header('Pragma: public');
-			ob_clean();
+			//ob_clean();
 			flush();
             echo $content;
 			exit();
