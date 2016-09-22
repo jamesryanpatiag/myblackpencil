@@ -628,15 +628,18 @@ class Modules extends CI_Controller {
 				default: $mime = 'application/force-download';
 			}
 
-			header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($filename)).' GMT');
-			header('Cache-Control: private',false);
+			//header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($filename)).' GMT');
+			//header('Cache-Control: private',false);
 			header('Content-Type: '.$mime);
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			//header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$filename.'"');
+            //header('Expires: 0');
 			header('Content-Length: '.$size);	// provide file size
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        	//header('Pragma: public');
 			ob_clean();
 			flush();
-			print $content;
+            echo $content;
 			exit();
 
 		}
@@ -646,3 +649,4 @@ class Modules extends CI_Controller {
 	}
 
 }
+				
