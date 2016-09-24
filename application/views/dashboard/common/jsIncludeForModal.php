@@ -41,6 +41,7 @@
             $.each(tableData, function(){
                 html += createHtmlChatLine(this); 
             });
+            $("#notes-chat-box").html("");
             $("#notes-chat-box").append(html);
           }
       });
@@ -62,26 +63,52 @@
             url: "<?php echo site_url('modules/getStudentInfo/'); ?>" + classid,
             type: 'GET',
             success: function(result) {
-              var studentData = JSON.parse(result)[0];
-              $('#studentUrl').val(studentData.url);
-              $('#studentUsername').val(studentData.student_username);
-              $('#studentPassword').val(studentData.student_password);
+              var studentData = JSON.parse(result);
+              $('#studentUrl').val(studentData["class"][0]["url"]);
+              $('#studentUsername').val(studentData["class"][0]["student_username"]);
+              $('#studentPassword').val(studentData["class"][0]["student_password"]);
+                
+              $.each(studentData["files"], function(){
+                $("#table_class_uploaded").append(uploadedFileDataRow(this));                
+              });
             }
         });
   }
 
+  function uploadedFileDataRow(item){
+    return "<tr id='uploaded_file_" + item.id + "'>" + 
+              "<td>-</td>" +
+              "<td>" + item.filename + "</td>" +
+              "<td>" + 
+                  "<a href='<?php echo site_url('modules/downloadFileById/'); ?>" + item.id + "'  ><i class='fa fa-download'></i></a>&nbsp;&nbsp;&nbsp;" +
+              "</td>" +
+              "</tr>";
+}
+
   function createHtmlChatLine(data){
-      return "<br/>" + 
+      var str = "<br/>" + 
               "<div class='item'>" +
                 '<img src="https://s-media-cache-ak0.pinimg.com/236x/d4/b1/16/d4b11676cc467b9f3700260c86846007.jpg" alt="Message User Image" data-pin-nopin="true">' + 
                 "<p class='message'>" + 
                     "<a href='#' class='name'>" + 
-                       "<small class='text-muted pull-right'><i class='fa fa-clock-o'></i>" + data.created_date + "</small>" + 
-                      data.username + 
+                       "<small class='text-muted pull-right'><i class='fa fa-clock-o'></i>" + String(data['note']['created_date']) + "</small>" + 
+                      data['note']['username'] + 
                     "</a>" + 
-                    data.message + 
-                "</p>" +
-              "</div>";
+                    data['note']['message'] + 
+                "</p>";
+      if(data['files'].length > 0){
+          str += "<div class='attachment'>" +
+                  "<h4>Attachments:</h4>" +
+                  "<p class='filename'>" +
+                    "<a href='<?php echo site_url('modules/downloadFileById/'); ?>" + data['files'][0].id + "'  >" + data['files'][0].filename + "</a>" + 
+                  "</p>" +
+                "</div>";
+      }
+        str += "</div>";
+
+        return str;
+
+
   }
 
   function getTutorClassPage(){
@@ -162,23 +189,37 @@
 
       //NOTES
       $('#submitAddNotes').click(function() {
-        var form_data = {
-          classId: $('#notesClassId').val(),
-          message: $('#noteMessage').val()
-        };
+        var file = input = document.getElementById('notesUploadFile');
+
+        var form_data = new FormData();
+        form_data.append('fileupload', file.files.length == 0 ? null : file.files[0]);
+        form_data.append('classId', $('#notesClassId').val());
+        form_data.append('message', $('#noteMessage').val());
+
         $.ajax({
             url: "<?php echo site_url('modules/addNotes'); ?>",
             type: 'POST',
             data: form_data,  
+            cache: false,
+            dataType: 'text', 
+            processData: false,
+            contentType: false, 
             success: function(result) {
                 $('#noteMessage').val("");
-                var data = JSON.parse(result);
-                var html = ""
-                $.each(data, function(){
-                    html += createHtmlChatLine(this); 
-                });
-                $("#notes-chat-box").append(html);
-                $("#notes-chat-box").animate({scrollTop: $("#notes-chat-box").height() * 1000});
+                var resultdata = JSON.parse(result);
+                var html = "";
+                if(resultdata['error']==false){
+                    html += createHtmlChatLine(resultdata); 
+                    $("#notes-chat-box").append(html);
+                    $("#notes-chat-box").animate({scrollTop: $("#notes-chat-box").height() * 1000});
+
+                    $("#uploadedFileCallOut").css("display", "none");
+                    $("#uploadedFilename").html("");
+                    $('#notesUploadFile').val("");
+                }
+            },
+            error: function(result){
+                console.log(result);
             }
         });
         return false;
@@ -195,7 +236,6 @@
             type: 'POST',
             data: form_data,  
             success: function(msg) {
-                console.log(msg);
                 if (msg == 'YES'){
                   $('#status-alert-msg').html('<div class="alert alert-success text-center">Status has been successfully changed!</div>');
                 }else if (msg == 'NO'){

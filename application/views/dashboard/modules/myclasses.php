@@ -253,7 +253,6 @@ $(document).ready(function(){
           processData: false,
           contentType: false,
           success: function(msg) {
-              console.log(msg);
               if (msg == 'YES'){
                 $('#alert-msg').html('<div class="alert alert-success text-center">Class has been successfully created!</div>');
                   clearFormData('');

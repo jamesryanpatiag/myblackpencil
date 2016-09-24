@@ -290,7 +290,29 @@ class Modules extends CI_Controller {
 
 	public function getStudentInfo($classid){
 
-		echo json_encode($this->module->getClassById($classid));
+		$class = $this->module->getClassById($classid);
+
+		$uploadedFiles = ($this->file->getFileByReferenceId($classid, "CLASS")); 
+
+		$files = array();
+
+		foreach($uploadedFiles as $u)
+		{
+			$file = array(
+					"id" => $u->id,
+					"filename" => $u->filename
+				);
+
+			array_push($files, $file);
+		}
+
+		$x = array(
+				"class" => $class,
+				"files"	=> $files
+			);
+
+
+		echo json_encode($x);
 
 	}
 
@@ -443,30 +465,102 @@ class Modules extends CI_Controller {
 
 	public function getNotes($classid){
 
-		echo json_encode($this->module->getNotes($classid));
+		$lists = $this->module->getNotes($classid);
+
+		$results = array();
+
+		foreach($lists as $list){
+
+			$uploadedFiles = ($this->file->getFileByReferenceId($list->id, "NOTES"));
+
+			$result = array(
+						
+					"note"	=> $list,
+
+					"files" => $uploadedFiles
+
+				);
+		
+			array_push($results, $result);
+		}
+
+		echo json_encode($results);
 	
 	}
 
 	public function addNotes(){
 
+		$result = $this->upload($_FILES, "fileupload");
+
 		$this->form_validation->set_rules('message', 'Message', 'required|trim');
 
-		if ($this->form_validation->run() == FALSE){
+		$is = isset($_FILES['fileupload']);
 
-        	echo validation_errors();
+		if ($this->form_validation->run() === false && $is === false){
+
+			$response = array(
+
+    				"notes" 	=> null,
+    				
+    				"error" 	=> true,
+    				
+    				"message"	=> validation_errors()
+    			);
+
+        	echo json_encode($response);
 
         }else{
 
         	$data = array(
+
         			"userid" 	=> $_SESSION['user_id'],
+        			
         			"classid" 	=> $this->input->post('classId'),
+        			
         			"message"	=> $this->input->post('message'),
+        			
         			"hasAttachment"	=> 0
         		);
 
         	$notesid = $this->module->addNotes($data);
 
-        	echo json_encode($this->module->getNotesById($notesid));
+        	if($result["filename"] != "" && $result["content"] != ""){
+
+				$fileData = array(
+
+						"referenceid" 	=> $notesid,
+
+						"file_category" => "NOTES",
+						
+						"stored_file" 	=> $result["content"],
+						
+						"filename" 		=> $result["filename"],
+						
+						"uploaded_by" 	=> $_SESSION["user_id"],
+						
+						"content_type" 	=> $result["content_type"]
+					);
+				
+
+				$this->file->saveFile($fileData);
+    		}
+
+        	$notes = $this->module->getNotesById($notesid);
+
+        	$uploadedFile = ($this->file->getFileByReferenceId($notesid, "NOTES"));
+
+    		$response = array(
+
+    				"files"		=> $uploadedFile,
+
+    				"note" 	=> $notes[0],
+
+    				"error" 	=> false,
+    				
+    				"message"	=> ""
+    			);
+
+        	echo json_encode($response);
 
         }
 	}
@@ -501,16 +595,17 @@ class Modules extends CI_Controller {
 
 	}
 
-	public function uploadfile(){
+	public function upload($fileUploaded, $uploadId){
 
 		$hasError = false;
-    	$fileName = "";
-    	$content = "";
-    	$content_type = "";
 
-    	$response = $this->input->post();
+		$content = "";
 
-    	if(!empty($_FILES['userfile']['name'])){
+		$content_type = "";
+
+		$filename = "";
+
+		if(!empty($fileUploaded[$uploadId]['name'])){
 
 			$uploadpath = $_SERVER['DOCUMENT_ROOT'].'/upload/';
 
@@ -532,7 +627,7 @@ class Modules extends CI_Controller {
 
 			$this->upload->initialize($config);
 
-			if ( ! $this->upload->do_upload('userfile')) 
+			if ( ! $this->upload->do_upload($uploadId)) 
 	        {
                 $response = $this->upload->display_errors();
 
@@ -544,11 +639,11 @@ class Modules extends CI_Controller {
 
 	        	$ext = $uploadedFile['file_ext'];
 
-	        	$filename = $_FILES['userfile']['name'];
+	        	$filename = $fileUploaded[$uploadId]['name'];
 
-				$tmpName  = $_FILES['userfile']['tmp_name'];
+				$tmpName  = $fileUploaded[$uploadId]['tmp_name'];
 
-				$content_type = $_FILES['userfile']['type'];
+				$content_type = $fileUploaded[$uploadId]['type'];
 
 				$fp      = fopen($tmpName, 'r');
 				
@@ -556,30 +651,50 @@ class Modules extends CI_Controller {
 
 				fclose($fp);
 
-				unlink($uploadpath . $tempUploadedFile . $ext);
+				// unlink($uploadpath . $tempUploadedFile . $ext);
 	        }
 
     	}
 
-    	if(!$hasError){
+    	return array(
+
+    			"hasError"		=> $hasError,
+    			
+    			"content_type"	=> $content_type,
+
+    			"filename"		=> $filename,
+    			
+    			"content"		=> $content
+    		);
+
+	}
+
+	public function uploadfile(){
+
+    	$response = $this->input->post();
+
+    	$result = $this->upload($_FILES, "userfile");
+
+    	if(!$result['hasError']){
 
     		$classid = $this->input->post("classId");
 
-    		if($filename != "" && $content != ""){
+    		if($result["filename"] != "" && $result["content"] != ""){
 
 
 				$fileData = array(
+
 						"referenceid" 	=> $classid,
 
 						"file_category" => "CLASS",
 						
-						"stored_file" 	=> $content,
+						"stored_file" 	=> $result["content"],
 						
-						"filename" 		=> $filename,
+						"filename" 		=> $result["filename"],
 						
 						"uploaded_by" 	=> $_SESSION["user_id"],
 						
-						"content_type" 	=> $content_type
+						"content_type" 	=> $result["content_type"]
 					);
 				
 
@@ -616,15 +731,25 @@ class Modules extends CI_Controller {
 			$size = strlen($content);
 
 			switch(strtolower(substr(strrchr($filename, '.'), 1))) {
+				
 				case 'jpeg':
+				
 				case 'jpg': $mime = 'image/jpg'; break;
+
 				case 'doc': $mime = 'application/msword'; break;
+				
 				case 'docx': $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+				
 				case 'pdf': $mime = 'application/pdf'; break;
+				
 				case 'xls': $mime = 'application/msexcel'; break;
+				
 				case 'xlsx': $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+				
 				case 'ppt': $mime = 'application/powerpoint'; break;
+				
 				case 'png': $mime = 'image/png'; break;
+				
 				default: $mime = 'application/force-download';
 			}
 
@@ -644,8 +769,6 @@ class Modules extends CI_Controller {
 
 		}
 
-
-		
 	}
 
 }

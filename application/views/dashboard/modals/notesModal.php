@@ -8,8 +8,6 @@
       <div class="modal-body" id="notes">
 
           <div id="form_container">
-          <?php echo validation_errors(); ?>
-          <?php echo form_open('modules/addNotes'); ?>
             
             <div class="box box-success" id="box-notes-modal">
               <div class="box-header">
@@ -17,9 +15,10 @@
                 <h3 class="box-title"></h3>
 
               </div>
+              <input type="hidden" id="notesClassId" />
               <div class="box-body chat" id="notes-chat-box">
                 <!-- chat item -->
-                <input type="hidden" id="notesClassId" />
+                
               </div>
               <div class="box-footer">
                 <div class="input-group">
@@ -31,8 +30,12 @@
                   </div>
                   <input type="text" class="form-control" placeholder="Type message..." id="noteMessage">
                   <div class="input-group-btn">
-                    <button type="submit" id="submitAddNotes" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                    <button type="button" id="submitAddNotes" class="btn btn-success"><i class="fa fa-plus"></i></button>
                   </div>
+                </div>
+                <br/>
+                <div class="callout callout-info" id="uploadedFileCallOut" style="display:none">
+                  <p id="uploadedFilename"></p>
                 </div>
               </div>
               <div id="notes-alert-msg"></div>
@@ -69,6 +72,19 @@
       $("#btn_attach_file").on('click', function(){
         $("#notesUploadFile").trigger('click');    
       })
+
+     $('#notesUploadFile').change(function(e){
+          var fileName = e.target.files[0].name;
+
+          $("#uploadedFileCallOut").css("display", "none");
+          $("#uploadedFilename").html("");
+
+          if(fileName!=""){
+              $("#uploadedFileCallOut").css("display", "block");
+              $("#uploadedFilename").html("<strong>This file is ready to be uploaded:</strong><br/> " + fileName);
+          }
+          
+      });
 
   })
 
