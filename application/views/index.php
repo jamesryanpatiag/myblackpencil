@@ -71,7 +71,7 @@ assignments.<br/>
                     <p class="lead"><i>
                     We have experts in <b>Liberal Arts, Sciences, Business and Mathematics</b>. Solve
                     your homework problems today. Simply submit your assignment instructions and
-                    let us do the rest. You can send an email to csr.myblackpencil@gmail com or
+                    let us do the rest. You can send an email to support@myblackpencil.net or
                     simply chat with us.</i></p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">

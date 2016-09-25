@@ -288,6 +288,24 @@ class Modules extends CI_Controller {
 
 	}
 
+	public function changepassword($id=""){
+
+		sessionChecker();
+
+		$data["module"] = "changepassword";
+		
+		$data["page_title"] = "Change Password";
+
+		$data["userid"] = $id;
+
+		$this->load->view("dashboard/common/header");
+
+		$this->load->view("dashboard/modules/changepassword",$data);
+
+		$this->load->view("dashboard/common/footer");
+
+	}
+
 	public function getStudentInfo($classid){
 
 		$class = $this->module->getClassById($classid);

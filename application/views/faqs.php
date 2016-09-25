@@ -23,7 +23,7 @@
                         <div class="panel-heading"> 
                             <h3 class="panel-title">Q: How much is a class or an assignment?</h3> 
                         </div> 
-                        <div class="panel-body"><i>A: Send your details to csr.myblackpencil@gmail.com to get your free quotation.</i>
+                        <div class="panel-body"><i>A: Send your details to support@myblackpencil.net to get your free quotation.</i>
                         </div> 
                     </div>  
 

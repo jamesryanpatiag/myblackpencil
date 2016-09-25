@@ -33,6 +33,18 @@
             return $id;
         }
 
+        public function changeUserPassword($userid, $password){
+
+            $user_data = array(
+                "password" => $this->generateHashPassword($password) 
+            );
+
+            $this->db->where('id', $userid);
+
+            $this->db->update('user', $user_data); 
+
+        }
+
         public function addPerson($data, $userId){
         	
         	$person_data = array(
@@ -130,6 +142,20 @@
             $this->db->join("person p", "u.id = p.userid", "inner");
 
             $this->db->where("u.id", $userid);
+
+            $query = $this->db->get();
+
+            return $query->result();
+
+        }
+
+        public function getUserByHashedId($userid){
+
+            $this->db->select('*');
+
+            $this->db->from("user u");
+
+            $this->db->where("sha1(u.id)", $userid);
 
             $query = $this->db->get();
 

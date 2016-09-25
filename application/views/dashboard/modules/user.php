@@ -121,8 +121,9 @@
                       <span class="error-mess"><?php echo form_error('email'); ?></span>
                     </div>  
                     <div class="form-group">
-                      <label for="role">Role</label>
+                      
                       <?php if($_SESSION['role_code']==ADMINISTRATOR){ ?>
+                      <label for="role">Role</label>
                       <select type="text" class="form-control" id="role" name="role">
                           <option value="">-- Select Role --</option>
                           <option value="STUDENT" <?php if(isset($user) && $user->role=='STUDENT'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'STUDENT'); ?> >Student</option>
@@ -131,15 +132,16 @@
                           <option value="ADMINISTRATOR" <?php if(isset($user) && $user->role=='ADMINISTRATOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'ADMINISTRATOR'); ?> >Administrator</option>
                       </select>
                       <?php } else if($_SESSION['role_code']==MANAGER && $isCurrentUser == false){ ?>
+                      <label for="role">Role</label>
                       <select type="text" class="form-control" id="role" name="role">
                           <option value="">-- Select Role --</option>
                           <option value="TUTOR" <?php if(isset($user) && $user->role=='TUTOR'){ echo 'selected="selected"'; } ?> <?php echo set_select('role', 'TUTOR'); ?> >Tutor</option>
                       </select>
                       <?php } else { ?>
                           <input type="hidden" id="role" name="role" value="<?php echo $user->role; ?>" />
-                          <label>: <?php echo $user->role; ?></label>
                       <?php } ?>
-                      <span class="error-mess"><?php echo form_error('role'); ?></span>
+                      <span class="error-mess"><?php echo form_error('role_codee'); ?></span>
+                      <a href="<?php echo site_url('modules/changepassword/') . sha1($user->id); ?>"><i class="fa fa-key"> Change Password</i></a>
                     </div>
                   </div>
                   <!-- /.box-body -->

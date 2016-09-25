@@ -134,7 +134,7 @@ class Auth extends CI_Controller {
         
         $this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|callback_isExistingUsername');
 
-        $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[8]');
+        $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[8]|callback_checkPasswordFormat');
 
         $this->form_validation->set_rules('password_confirmation', 'Password Confirmation', 'trim|required|matches[password]');
 
@@ -236,12 +236,18 @@ class Auth extends CI_Controller {
 
 	public function isPasswordValid($password, $hash){
 
-		if(password_verify($password, $hash)){
-		
+		$existingPass = str_replace($password, "", $hash);
+		$existingPass = str_replace(",", "", $existingPass);
+		$existingPass = str_replace(" ", "", $existingPass);
+
+		if(password_verify($password, trim($existingPass))){
+
 			return true;
 		
 		}else{
-		
+
+			$this->form_validation->set_message('isPasswordValid', "Invalid Password");
+
 			return false;
 		
 		}	
@@ -278,6 +284,28 @@ class Auth extends CI_Controller {
 		}
 	}
 
+	public function checkPasswordFormat($password){
+
+		$pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]/";
+
+		if(!preg_match($pattern, $password)){
+
+			$this->form_validation->set_message('checkPasswordFormat', 'Password should contains of the following: 
+																			<br/>- Atleast 1 Uppercase Alphabet
+																			<br/>- Atleast 1 Lowercase Alphabet 
+																			<br/>- Arleast 1 Special Character
+																			<br/>- Atleast 1 Numeric Character');
+
+			return false;
+
+		}else{
+
+			return true;
+
+		}
+
+	}
+
 	public function isExistingEmail($str)
 	{	
 
@@ -311,4 +339,49 @@ class Auth extends CI_Controller {
 		$this->loginPage($data);
 
 	}
+
+	public function changepassword(){
+
+		$users = $this->user_model->getUserByHashedId($this->input->post('userid'));
+
+		$user = $users[0];
+
+		$data["isSuccess"] = false;
+
+		$this->form_validation->set_rules('old_password', 'Old Password', 'trim|required|callback_isPasswordValid['.$this->input->post('old_password').', '.$user->password.']');
+
+        $this->form_validation->set_rules('new_password', 'New Password', 'trim|required|min_length[8]|callback_checkPasswordFormat');
+
+        $this->form_validation->set_rules('retype_password', 'Password Confirmation', 'trim|required|matches[new_password]');
+
+        $id = $this->input->post('userid');
+
+		if ($this->form_validation->run() == FALSE){
+
+			$data["message"] = "";
+
+        }else{
+
+        	$data["isSuccess"] = true;
+
+        	$data["message"] = "Password Successfully Changed";
+
+        	$this->user_model->changeUserPassword($user->id, $this->input->post("new_password"));
+			
+        }
+
+        $data["module"] = "changepassword";
+		
+		$data["page_title"] = "Change Password";
+
+		$data["userid"] = $id;
+
+		$this->load->view("dashboard/common/header");
+
+		$this->load->view("dashboard/modules/changepassword",$data);
+
+		$this->load->view("dashboard/common/footer");
+	}
+
+
 }
