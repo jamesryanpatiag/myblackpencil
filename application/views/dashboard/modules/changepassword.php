@@ -48,7 +48,7 @@
                       <span class="error-mess"><?php echo form_error('old_password'); ?></span>
                     </div>
                     <div class="form-group">
-                      <label for="new_password">New Password</label>
+                      <label for="new_password">New Password</label> (e.g Ex@mple99)
                       <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" value="" >
                       <span class="error-mess"><?php echo form_error('new_password'); ?></span>
                     </div>

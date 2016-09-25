@@ -102,7 +102,10 @@ class Auth extends CI_Controller {
 
 					$this->session->set_userdata($sessiondata);
 
-					//ADD switch to where users will be re-directed
+					$data['is_password_changed'] = $user->is_password_changed;
+
+					$data['isFromLogin'] = true;
+
 					$data['module'] = "dashboard";					
 					
 					$this->load->view("dashboard/common/header");
@@ -325,8 +328,9 @@ class Auth extends CI_Controller {
 	public function verifyUser($hash, $userid){
 
 		$data = array(
-				"is_verified" => 1
-			);
+				"is_verified" => 1,
+				"is_password_changed" => 1
+				);
 
 		$this->user_model->updateUser($data, $userid);
 
@@ -337,6 +341,25 @@ class Auth extends CI_Controller {
 		$data["account_activated"] = true;
 
 		$this->loginPage($data);
+
+	}
+
+	public function forceChangePassword(){
+
+		$this->form_validation->set_rules('new_password', 'New Password', 'trim|required|min_length[8]|callback_checkPasswordFormat');
+
+        $this->form_validation->set_rules('retype_password', 'Password Confirmation', 'trim|required|matches[new_password]');
+
+	    if ($this->form_validation->run() == FALSE){
+
+			echo json_encode(validation_errors());
+
+		} else {
+
+			$this->user_model->changeUserPassword($_SESSION['user_id'], $this->input->post("new_password"));
+
+			echo "YES";
+		}
 
 	}
 

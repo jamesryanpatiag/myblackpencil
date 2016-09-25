@@ -82,7 +82,30 @@
                         <div class="panel-body"><i>A: A notification will be sent to your email address and it will be sent to you.</i>   
                         </div> 
                     </div>       
-                    
+
+                    <div class="panel panel-info"> 
+                        <div class="panel-heading"> 
+                            <h3 class="panel-title">Q: How many hours/days do you need to accommodate quizzes and exams and papers?</h3> 
+                        </div> 
+                        <div class="panel-body"><i>A: To make sure that we will be able to meet our guarantee we can only accept quizzes, test and exams 24 hours before it’s due and 48 hours for papers, case studies and essay assignments.</i>   
+                        </div> 
+                    </div>     
+
+                    <div class="panel panel-info"> 
+                        <div class="panel-heading"> 
+                            <h3 class="panel-title">Q: Do you have a plagiarism checker?</h3> 
+                        </div> 
+                        <div class="panel-body"><i>A: Yes, we have different plagiarism checker. Rest assured that we are 100% plagiarism free.</i>   
+                        </div> 
+                    </div>   
+
+                    <div class="panel panel-info"> 
+                        <div class="panel-heading"> 
+                            <h3 class="panel-title">Q: What if I am not satisfied with the output and I want to revise my paper? How much do I need to pay?</h3> 
+                        </div> 
+                        <div class="panel-body"><i>A: It’s free! Simply ask your tutor to revise your paper.</i>   
+                        </div> 
+                    </div> 
                 </div>
             </div>
         </div>

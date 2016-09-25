@@ -12,6 +12,8 @@
 
   function setNotesData(classid){
       $('#notesClassId').val(classid);
+      $('#uploadedFileCallOut').hide();
+      $('#notesUploadFile').val('');
       setChatNotes(classid);
   }
 

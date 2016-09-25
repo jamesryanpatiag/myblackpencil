@@ -36,7 +36,8 @@
         public function changeUserPassword($userid, $password){
 
             $user_data = array(
-                "password" => $this->generateHashPassword($password) 
+                "password" => $this->generateHashPassword($password),
+                "is_password_changed" => 1
             );
 
             $this->db->where('id', $userid);
