@@ -148,7 +148,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url()."assets/";?>js/bootstrap.min.js"></script>
 
-
+    <script type="text/javascript" src="//userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/97494733d3da985a1b126b309dcad250abe27e6c1f380accbd8fab4c008fd8c4.js"></script>
 </body>
 
 </html>
