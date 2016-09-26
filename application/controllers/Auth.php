@@ -294,6 +294,7 @@ class Auth extends CI_Controller {
 		if(!preg_match($pattern, $password)){
 
 			$this->form_validation->set_message('checkPasswordFormat', 'Password should contains of the following: 
+																			<br/>- Atleast 8 length character	
 																			<br/>- Atleast 1 Uppercase Alphabet
 																			<br/>- Atleast 1 Lowercase Alphabet 
 																			<br/>- Arleast 1 Special Character
