@@ -35,6 +35,9 @@
                   <a class="btn btn-primary btn-flat" title="Profile" 
                                      href="<?php echo site_url('user/userpage/profile/') . $_SESSION['user_id'];?>" >Profile</a>
                 </div>
+                <div>
+
+                </div>
                 <div class="pull-right">
                   <a href="<?php echo site_url('auth/logout');?>" class="btn btn-default btn-flat">Sign out</a>
                 </div>

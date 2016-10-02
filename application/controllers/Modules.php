@@ -234,7 +234,11 @@ class Modules extends CI_Controller {
 		
 		$data["page_title"] = "Consultants";
 
-		$data["list"] = $this->user_model->getUsersByRole('TUTOR');
+		$consultants = $this->user_model->getUsersByRole('TUTOR');
+
+		$list = array_merge($consultants, $this->user_model->getUsersByRole('MANAGER'));
+
+		$data["list"] = $list;
 
 		$this->load->view("dashboard/common/header");
 

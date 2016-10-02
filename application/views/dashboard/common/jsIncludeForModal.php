@@ -193,11 +193,14 @@
       $('#submitAddNotes').click(function() {
         var file = input = document.getElementById('notesUploadFile');
 
+        var notes = $('#noteMessage').val();
+        message = notes.replace(/\n\r?/g, '<br />');
+
         var form_data = new FormData();
         form_data.append('fileupload', file.files.length == 0 ? null : file.files[0]);
         form_data.append('classId', $('#notesClassId').val());
-        form_data.append('message', $('#noteMessage').val());
-
+        form_data.append('message', message);
+                
         $.ajax({
             url: "<?php echo site_url('modules/addNotes'); ?>",
             type: 'POST',

@@ -19,7 +19,7 @@
                 "role"    => $role,
 				"is_logged_in" => 0,
 				"last_login" => null,
-				"is_verified" => 0,
+				"is_verified" => $role == STUDENT ? 0 : 1,
 				"is_active" => 1,
 				"created_by" => 1   
 			);		
@@ -163,5 +163,101 @@
             return $query->result();
 
         }
+
+        public function getAllExpertise(){
+
+            $this->db->select('*');
+
+            $this->db->from("expertiselookup");
+
+            $query = $this->db->get();
+
+            return $query->result();
+
+        }
+
+         public function getAllExpertiseByUser($userid){
+
+            $this->db->select('*');
+
+            $this->db->from("userexpertise u");
+
+            $this->db->join("expertiselookup el", "u.expertiselookupid = el.id", "inner");
+
+            $this->db->where("u.userid", $userid);
+
+            $query = $this->db->get();
+
+            return $query->result();
+
+        }
+
+        public function deleteAllUserExpertiseByUser($userid){
+
+            $this->db->where("userid", $userid);
+
+            $this->db->delete("userexpertise");
+
+        }
+
+        public function deleteUserExpertiseById($id){
+
+            $this->db->where("id", $id);
+
+            $this->db->delete("userexpertise");
+
+        }
+
+        public function deleteUserExpertiseByUserAndExpertise($userid, $expertiseid){
+
+            $this->db->where(array("userid" => $userid, "expertiselookupid" => $expertiseid));
+
+            $this->db->delete("userexpertise");
+
+        }
+
+        public function getExpertiseByName($name){
+
+            $this->db->select('*');
+
+            $this->db->from("expertiselookup");
+
+            $this->db->where("lower(name)", strtolower($name));
+
+            $query = $this->db->get();
+
+            return $query->result();
+
+        }
+
+        public function insertExpertise($name){
+
+            $expertise_data = array(
+                "name" => $name
+            );      
+            
+            $this->db->insert("expertiselookup", $expertise_data);
+            
+            $id = $this->db->insert_id();
+            
+            return $id;
+
+        }
+
+        public function insertUserExpertise($expertiseId, $userid){
+
+            $userexpertise_data = array(
+                "userid" => $userid,
+                "expertiselookupid" => $expertiseId
+            );      
+            
+            $this->db->insert("userexpertise", $userexpertise_data);
+            
+            $id = $this->db->insert_id();
+            
+            return $id;
+
+        }
+
 }
 ?>

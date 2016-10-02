@@ -28,7 +28,7 @@
                   <div style="display:none">
                       <input type="file" id="notesUploadFile" name="notesUploadFile" />
                   </div>
-                  <input type="text" class="form-control" placeholder="Type message..." id="noteMessage">
+                  <textarea row="4" id="noteMessage" class="form-control" placeholder="Type message..." ></textarea>
                   <div class="input-group-btn">
                     <button type="button" id="submitAddNotes" class="btn btn-success"><i class="fa fa-plus"></i></button>
                   </div>

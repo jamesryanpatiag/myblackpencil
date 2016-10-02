@@ -34,6 +34,33 @@ class User extends CI_Controller {
 
 	}
 
+	function getAllExpertise(){
+
+		echo json_encode($this->user_model->getAllExpertise());
+
+	}
+
+	function getAllExpertiseByUser($userid){
+		echo json_encode($this->user_model->getAllExpertiseByUser($userid));
+
+	}
+
+	function deleteUserExpertise(){
+
+		$name = $this->input->post('name');
+		$userId = $this->input->post('userId');
+
+		$expertiseLookup = $this->user_model->getExpertiseByName($name);
+
+		if(count($expertiseLookup)>0){
+		
+			$expertiseid = $expertiseLookup[0]->id;
+			$this->user_model->deleteUserExpertiseByUserAndExpertise($userId, $expertiseid);
+		}
+
+		echo $userId . "-" . $expertiseid;
+	}
+
 	public function editUser(){
 
 		$this->validateUser();
@@ -42,7 +69,9 @@ class User extends CI_Controller {
 
 		if ($this->form_validation->run() == FALSE){
 
-			$this->userpage($this->input->post('module'), $this->input->post('userid'));
+			$tempUserId = $this->input->post('userid') == "" ? $_SESSION['user_id'] : $this->input->post('userid');
+
+			$this->userpage($this->input->post('module'), $tempUserId);
 
         }else{
 
@@ -65,7 +94,54 @@ class User extends CI_Controller {
 
         	$this->session->set_flashdata('message', 'Save Success!');
 			
-        	$data["user"] = $this->user_model->getUserById($this->input->post('userid'))[0];
+			$userid = $this->input->post('userid');
+
+        	if($userid == null){
+
+        		$userid = $_SESSION['userid'];
+
+        	}
+
+			if($this->input->post('allexpertise')!=null){
+
+				$this->user_model->deleteAllUserExpertiseByUser($userid);
+
+				$allexpertise = $this->input->post('allexpertise');
+			
+			}else{
+
+				$allexpertise = array();
+
+				$tempAllExpertise = $this->user_model->getAllExpertiseByUser($userid);
+
+				foreach($tempAllExpertise as $tempExpertise){
+
+					array_push($allexpertise, $tempExpertise->name);
+
+				}
+
+			}
+
+			foreach($allexpertise as $expertise){
+
+				$expertiseLookup = $this->user_model->getExpertiseByName($expertise);
+
+				if(count($expertiseLookup)==0){
+
+					$expertiseId = $this->user_model->insertExpertise($expertise);
+
+				}else{
+					$ex = $expertiseLookup[0];
+
+					$expertiseId = $ex->id;
+
+				}
+
+				$this->user_model->insertUserExpertise($expertiseId, $userid);
+
+			}
+
+        	$data["user"] = $this->user_model->getUserById($userid)[0];
 
         	$this->isSuccess = "true";
 
@@ -108,6 +184,31 @@ class User extends CI_Controller {
 		}
 	}
 
+	public function isMobileNumberValid($str){
+
+		if($str != ""){
+
+			$pattern = "/^(\+\d{1,3}[- ]?)?\d{10}$/";
+
+			if(!preg_match($pattern, $str)){
+
+				$this->form_validation->set_message('isMobileNumberValid', 'Invalid Mobile Number');
+
+				return false;
+
+			}else{
+
+				return true;
+
+			}
+
+		}else{
+
+				return true;
+		}
+
+	}
+
 	public function isExistingEmail($str)
 	{		
 
@@ -137,6 +238,8 @@ class User extends CI_Controller {
 		$data["sub_title"] = $module;
 
 		$data["isSuccess"] = $this->isSuccess;
+
+		$data["allUserExpertise"] = $this->user_model->getAllExpertiseByUser($id);
 
 		$this->isSuccess = "false";
 
@@ -189,6 +292,9 @@ class User extends CI_Controller {
         $this->form_validation->set_rules('email', 'Email', 'required|callback_isExistingEmail');
 
         $this->form_validation->set_rules('role', 'Role', 'required');
+
+        $this->form_validation->set_rules('mobileno', 'Mobile Number', 'callback_isMobileNumberValid');
+        
 	} 
 
 	public function sendSuccessEmail($email){
