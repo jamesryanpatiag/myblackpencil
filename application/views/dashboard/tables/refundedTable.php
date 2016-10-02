@@ -27,7 +27,7 @@
                   <td><?php echo getUsernameById($item->customer_id);?></td>
                   <td><?php echo getTypeByCode($item->type)?></td>
                   <td>
-                      <a type="button" class="label label-primary" onClick="setNotesData('<?php echo $item->id;?>')" title="Add Notes" data-toggle="modal" data-target="#notes" >
+                      <a type="button" class="label label-primary" onClick="setNotesData('<?php echo $item->classid;?>')" title="Add Notes" data-toggle="modal" data-target="#notes" >
                             Add Notes</a>
                   </td>
                   <td>

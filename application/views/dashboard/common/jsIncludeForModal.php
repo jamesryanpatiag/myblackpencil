@@ -210,8 +210,10 @@
             processData: false,
             contentType: false, 
             success: function(result) {
+              console.log(result);
                 $('#noteMessage').val("");
                 var resultdata = JSON.parse(result);
+
                 var html = "";
                 if(resultdata['error']==false){
                     html += createHtmlChatLine(resultdata); 
@@ -221,6 +223,8 @@
                     $("#uploadedFileCallOut").css("display", "none");
                     $("#uploadedFilename").html("");
                     $('#notesUploadFile').val("");
+                }else{
+                    $('#notes-alert-msg').val();
                 }
             },
             error: function(result){

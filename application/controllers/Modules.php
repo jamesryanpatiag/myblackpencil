@@ -526,7 +526,9 @@ class Modules extends CI_Controller {
     				
     				"error" 	=> true,
     				
-    				"message"	=> validation_errors()
+    				"message"	=> validation_errors(),
+
+    				"response"	=> $result['response']
     			);
 
         	echo json_encode($response);
@@ -579,7 +581,9 @@ class Modules extends CI_Controller {
 
     				"error" 	=> false,
     				
-    				"message"	=> ""
+    				"message"	=> "",
+
+    				"response"	=> $result['response']
     			);
 
         	echo json_encode($response);
@@ -627,6 +631,8 @@ class Modules extends CI_Controller {
 
 		$filename = "";
 
+    	$response = "";
+
 		if(!empty($fileUploaded[$uploadId]['name'])){
 
 			$uploadpath = $_SERVER['DOCUMENT_ROOT'].'/upload/';
@@ -637,7 +643,7 @@ class Modules extends CI_Controller {
 
 	    	$config['upload_path'] = $uploadpath;
 			
-			$config['allowed_types'] = '*';
+			$config['allowed_types'] = 'pdf|xls|xlsx|jpg|jpeg|png|gif|doc|docx|txt';
 			
 			$config['max_size'] = 2048;
 
@@ -648,6 +654,7 @@ class Modules extends CI_Controller {
 			$this->load->library('upload', $config);
 
 			$this->upload->initialize($config);
+			
 
 			if ( ! $this->upload->do_upload($uploadId)) 
 	        {
@@ -657,6 +664,7 @@ class Modules extends CI_Controller {
 	        }
 	        else
 	        {
+
 	        	$uploadedFile = $this->upload->data();
 
 	        	$ext = $uploadedFile['file_ext'];
@@ -686,7 +694,9 @@ class Modules extends CI_Controller {
 
     			"filename"		=> $filename,
     			
-    			"content"		=> $content
+    			"content"		=> $content,
+
+    			"response"		=> $response
     		);
 
 	}
