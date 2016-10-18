@@ -164,7 +164,15 @@ assignments.<br/>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url()."assets/";?>js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="//userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/97494733d3da985a1b126b309dcad250abe27e6c1f380accbd8fab4c008fd8c4.js"></script>  
+    <!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?4IbxXuCtXNHU5LJuVOj8hHFi43ezq2j9";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zopim Live Chat Script-->
 </body>
 
 </html>
